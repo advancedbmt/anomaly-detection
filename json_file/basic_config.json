@@ -1,0 +1,52 @@
+{
+    "device_info": {
+      "topic": "factory/line1/device123/temperatureSensor",
+      "tag_list": {
+        "temperatureSensor1": {
+          "tagUnit": "Celsius",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 20, "maxIncrease": 80 },
+            "idle": { "minIncrease": 0, "maxIncrease": 20 },
+            "stop": { "minIncrease": 0, "maxIncrease": 5 }
+          }
+        }
+      },
+      "ambientTemperature": 22.5,
+      "location": "Toronto, ON",
+      "factoryName": "MainFactory1",
+  
+      "calibrationDate": "2025-01-01"
+    },
+    "synth_detial": {
+      "mode": "batch",
+      "batch": [
+        "8am off", "9am on\\idle", "9:30am run", "9:45am stop\\idle", "10am run",
+        "5pm stop\\idle", "5:30pm run", "1:30am stop\\idle", "2am run"
+      ],
+      "real_time": [
+        "8am off", "9am on\\idle", "9:30am run", "9:45am stop\\idle", "10am run",
+        "5pm stop\\idle", "5:30pm run", "1:30am stop\\idle", "2am run"
+      ],
+      "customAnomaly": [
+        {
+          "HappenTime": "2025-04-07T13:00:00Z",
+          "Type": "Overheat",
+          "length": "5min",
+          "Value": "95.7"
+        },
+        {
+          "HappenTime": "2025-04-07T16:45:00Z",
+          "Type": "Spike",
+          "length": "10min",
+          "Value": "102.3"
+        }
+      ]
+    },
+    "network_info": {
+      "mqttEndpoint": "mqtt://broker.hivemq.com",
+      "databaseEndpoint": "https://db.factory.local/api",
+      "fileEndpoint": "https://files.factory.local/uploads"
+    }
+  }
+  
