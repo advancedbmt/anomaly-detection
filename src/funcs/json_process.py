@@ -2,12 +2,6 @@ import json
 from datetime import datetime
 
 
-with open("config.json", "r") as file:
-    config = json.load(file)
-
-
-batch_data = config["state_timeline"]["batch"]
-
 
 def parse_entry(entry):
     time_part, state_part = entry.split(" ", 1)
@@ -24,8 +18,15 @@ def parse_entry(entry):
     return (time_str, state_clean)
 
 
-parsed_batch = [parse_entry(entry) for entry in batch_data]
+if __name__ == "__main__":
+    with open("config.json", "r") as file:
+        config = json.load(file)
 
 
-print("Parsed batch schedule:")
-print(parsed_batch)
+    batch_data = config["state_timeline"]["batch"]
+
+    parsed_batch = [parse_entry(entry) for entry in batch_data]
+
+
+    print("Parsed batch schedule:")
+    print(parsed_batch)
