@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
-
+import pandas as pd
+import random
+import numpy as np
 
 
 def parse_entry(entry):
@@ -16,6 +18,45 @@ def parse_entry(entry):
     state_clean = state_part.replace("\\", " ")
     
     return (time_str, state_clean)
+
+def inject_anomaly_by_time(df, anomaly, time_column='timestamp', target_column='feature_0'):
+    """
+    Injects an anomaly into a DataFrame based on time-of-day match, ignoring date.
+
+    Parameters:
+    - df: Pandas DataFrame with a datetime column
+    - anomaly: Dictionary with keys "HappenTime", "Type", "length", "Value"
+    - time_column: Name of the timestamp column (default "timestamp")
+    - target_column: Name of the feature column to inject into (default "feature_0")
+
+    Returns:
+    - DataFrame with anomaly injected
+    """
+    # Ensure timestamp column is datetime
+    df[time_column] = pd.to_datetime(df[time_column])
+
+    # Extract the time part from the HappenTime
+    target_time = datetime.fromisoformat(anomaly["HappenTime"].replace("Z", "")).time()
+    
+    # Extract anomaly parameters
+    duration = int(anomaly["length"].replace("min", ""))
+    anomaly_value = float(anomaly["Value"])
+
+    # Match only the time (ignore date)
+    df['__only_time'] = df[time_column].dt.time
+    start_indices = df.index[df['__only_time'] == target_time].tolist()
+
+    if start_indices:
+        start_idx = start_indices[0]
+        end_idx = start_idx + duration
+        num_rows = end_idx - start_idx
+        noise = np.random.uniform(-0.5, 0.5, size=num_rows) * 5
+        df.loc[start_idx:end_idx-1, target_column] = anomaly_value + noise
+
+    # Clean up
+    df.drop(columns=['__only_time'], inplace=True)
+    
+    return df
 
 
 if __name__ == "__main__":
