@@ -1,0 +1,77 @@
+{
+  "device_info": {
+    "topic": "factory/line1/device123/temperatureSensor",
+    "tagName": "temperatureSensor1",
+    "tagUnit": "Celsius",
+    "samplingRate": "1Hz",
+    "states": [
+      {
+        "state": "run",
+        "tagValueMin": 20,
+        "tagValueMax": 80
+      },
+      {
+        "state": "idle",
+        "tagValueMin": 0,
+        "tagValueMax": 20
+      },
+      {
+        "state": "stop",
+        "tagValueMin": 0,
+        "tagValueMax": 5
+      }
+    ],
+    "calibrationDate": "2025-01-01"
+  },
+  "state_timeline": {
+    "batch": [
+      "8am off", "9am on\\idle", "9:30am run", "9:45am stop\\idle", "10am run",
+      "5pm stop\\idle", "5:30pm run", "1:30am stop\\idle", "2am run"
+    ],
+    "real_time": [
+      "8am off", "9am on\\idle", "9:30am run", "9:45am stop\\idle", "10am run",
+      "5pm stop\\idle", "5:30pm run", "1:30am stop\\idle", "2am run"
+    ],
+    "anomalies": [
+      {
+        "tagName": "motorTempSensor01",
+        "status": "Warning",
+        "failureType": "Motor Bearings",
+        "autoGenValue": true,
+        "value": 95.0,
+        "operationMode": "batch"
+      },
+      {
+        "tagName": "vibrationSensor03",
+        "status": "Critical",
+        "failureType": "Loose Screw",
+        "autoGenValue": false,
+        "value": true,
+        "operationMode": "realtime"
+      }
+    ],
+    "customAnomaly": [
+      {
+        "HappenTime": "2025-04-07T13:00:00Z",
+        "Type": "Overheat",
+        "length": "5min",
+        "Value": "95.7"
+      },
+      {
+        "HappenTime": "2025-04-07T16:45:00Z",
+        "Type": "Spike",
+        "length": "10min",
+        "Value": "102.3"
+      }
+    ]
+  },
+  "general_parameters": {
+    "ambientTemperature": 22.5,
+    "location": "Toronto, ON",
+    "factoryName": "MainFactory1",
+    "mode": "batch",
+    "mqttEndpoint": "mqtt://broker.hivemq.com",
+    "databaseEndpoint": "https://db.factory.local/api",
+    "fileEndpoint": "https://files.factory.local/uploads"
+  }
+}
