@@ -56,12 +56,15 @@
     "synth_detial": {
       "mode": "batch",
       "batch": [
+        "12:00am off",          
+        "1:30am idle", "2am run",
         "8am off", "9am idle", "9:30am run", "9:45am idle", "10am run",
-        "5pm idle", "5:30pm run", "1:30am idle", "2am run"
+        "5pm idle", "5:30pm run",
+        "11:59pm run" 
       ],
       "real_time": [
-        "8am off", "9am on\\\\idle", "9:30am run", "9:45am stop\\\\idle", "10am run",
-        "5pm stop\\\\idle", "5:30pm run", "1:30am stop\\\\idle", "2am run"
+        "1:30am stop\\\\idle", "2am run", "8am off", "9am on\\\\idle", "9:30am run", "9:45am stop\\\\idle", "10am run",
+        "5pm stop\\\\idle", "5:30pm run"
       ],
       "customAnomaly": [
         {
