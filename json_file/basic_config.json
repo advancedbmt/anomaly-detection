@@ -19,7 +19,7 @@
           "maxOperationTemprature": 80,
           "minOperationTemprature": -20,
           "states": {
-            "run": { "minIncrease": 44, "maxIncrease": 60},
+            "run": { "minIncrease": 20, "maxIncrease": 50},
             "idle": { "minIncrease": 0, "maxIncrease": 0},
             "off": { "minIncrease": 0, "maxIncrease": 0}
           }
@@ -30,7 +30,7 @@
           "maxOperationTemprature": 80,
           "minOperationTemprature": -20,
           "states": {
-            "run": { "minIncrease": 44, "maxIncrease": 60},
+            "run": { "minIncrease": 10, "maxIncrease": 30},
             "idle": { "minIncrease": 0, "maxIncrease": 0},
             "off": { "minIncrease": 0, "maxIncrease": 0}
           }
@@ -41,7 +41,7 @@
           "maxOperationTemprature": 80,
           "minOperationTemprature": -20,
           "states": {
-            "run": { "minIncrease": 44, "maxIncrease": 60},
+            "run": { "minIncrease": 44, "maxIncrease": 50},
             "idle": { "minIncrease": 0, "maxIncrease": 0},
             "off": { "minIncrease": 0, "maxIncrease": 0}
           }
