@@ -54,7 +54,7 @@
       "calibrationDate": "2025-01-01"
     },
     "synth_detial": {
-      "mode": "batch",
+      "mode": "stream",
       "batch": [
         "12:00am off",          
         "1:30am idle", "2am run",
