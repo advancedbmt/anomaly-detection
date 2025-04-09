@@ -16,7 +16,10 @@ def parse_entry(entry):
     return (time_str, state_clean)
 
 
-def inject_anomaly_by_time(df, anomaly, time_column="timestamp", target_column="feature_0"):
+def inject_anomaly_by_time(df, anomaly, sensor_name, time_column="timestamp", target_column="feature_0"):
+    if anomaly["device"] != sensor_name:
+        return df
+    
     df[time_column] = pd.to_datetime(df[time_column])
 
     # Strip timezone if present
