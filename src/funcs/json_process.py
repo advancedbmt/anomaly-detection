@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import random
 import numpy as np
@@ -16,20 +16,24 @@ def parse_entry(entry):
     return (time_str, state_clean)
 
 
-def inject_anomaly_by_time(
-    df, anomaly, time_column="timestamp", target_column="feature_0"
-):
+def inject_anomaly_by_time(df, anomaly, time_column="timestamp", target_column="feature_0"):
     df[time_column] = pd.to_datetime(df[time_column])
-    target_time = datetime.fromisoformat(anomaly["HappenTime"].replace("Z", "")).time()
-    duration = int(anomaly["length"].replace("min", ""))
+
+    # Strip timezone if present
+    happen_time = pd.to_datetime(anomaly["HappenTime"]).tz_localize(None)
+
+    duration_minutes = int(anomaly["length"].replace("min", ""))
     anomaly_value = float(anomaly["Value"])
-    df["__only_time"] = df[time_column].dt.time
-    start_indices = df.index[df["__only_time"] == target_time].tolist()
-    if start_indices:
-        start_idx = start_indices[0]
-        end_idx = start_idx + duration
-        noise = np.random.uniform(-0.5, 0.5, size=end_idx - start_idx) * 5
-        df.loc[start_idx : end_idx - 1, target_column] = anomaly_value + noise
-        df.loc[start_idx : end_idx - 1, "is_anomaly"] = True
-    df.drop(columns=["__only_time"], inplace=True)
+
+    time_diff = (df[time_column] - happen_time).abs()
+    start_idx = time_diff.idxmin()
+
+    end_time = happen_time + timedelta(minutes=duration_minutes)
+    mask = (df[time_column] >= happen_time) & (df[time_column] < end_time)
+
+    noise = np.random.uniform(-0.5, 0.5, size=mask.sum()) * 5
+    df.loc[mask, target_column] = anomaly_value + noise
+    df.loc[mask, "is_anomaly"] = True
+
     return df
+
