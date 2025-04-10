@@ -55,13 +55,15 @@
           "HappenTime": "2025-04-07T10:15:00Z",
           "Type": "Overheat",
           "length": "10min",
-          "Value": "115.0"
+          "Value": "115.0",
+          "tag": "temperature"
         },
         {
           "HappenTime": "2025-04-07T15:00:00Z",
           "Type": "RPM Spike",
           "length": "5min",
-          "Value": "160.0"
+          "Value": "160.0",
+          "tag": "rpm"
         }
       ]
     },

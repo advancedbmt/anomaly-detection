@@ -72,14 +72,14 @@
         "Type": "Overheat",
         "length": "5min",
         "Value": "95.7",
-        "device": "temperatureSensor1"
+        "tag": "temperatureSensor1"
       },
       {
         "HappenTime": "2025-04-07T16:45:00Z",
         "Type": "Spike",
         "length": "10min",
         "Value": "102.3",
-        "device": "temperatureSensor1"
+        "tag": "temperatureSensor1"
       }
     ]
   },

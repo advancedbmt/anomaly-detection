@@ -42,7 +42,8 @@
           "HappenTime": "2025-04-07T14:30:00Z",
           "Type": "Unexpected Opening",
           "length": "5min",
-          "Value": "1"
+          "Value": "1",
+          "tag": "Bale Intake"
         }
       ]
     },

@@ -33,7 +33,8 @@
           "HappenTime": "2025-04-07T14:00:00Z",
           "Type": "Unexpected Drop",
           "length": "10min",
-          "Value": "100.0"
+          "Value": "100.0",
+          "tag": "hurd"
         }
       ]
     },

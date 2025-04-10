@@ -46,13 +46,15 @@
           "HappenTime": "2025-04-07T14:00:00Z",
           "Type": "Overweight Spike",
           "length": "15min",
-          "Value": "2800"
+          "Value": "2800",
+          "tag": "total_weight"
         },
         {
           "HappenTime": "2025-04-07T20:30:00Z",
           "Type": "Undercount",
           "length": "10min",
-          "Value": "3"
+          "Value": "3",
+          "tag": "bales"
         }
       ]
     },
