@@ -1,15 +1,40 @@
 # synthetic_data_generator
 ## TODOS
-- state transaction  Done
-- realtime data streaming  Done
-- multi tag support Done
+- batch (DONE)
+- real-time (DONE)
+- anomaly injection (DONE)
+- csv injection (DONE)
+- state time line (DONE)
+- device info (Partially DONE)
+- multiple devices to match SCADA design (Partially DONE)
+  1. need to simulate 10 motors
+  2. bale counter (one event per)
+     a. need to implement vary value
+  3. bale scale
+     a. bale ID (random hash tag)
+     b. bale wright (250 - 750 kg)
+  4. production output (10 min)
+     a. long fiber (340 - 400 kg)
+     b. short fiber (600-700 kg)
+     c. herd (1300 - 1500 kg)
+  5. hatch (left, right)(TODO)
+- incident injection (TODO)
+  1. similiar to anomolyinjection
+  2. need to inject seeral anomoly to different sensors based on one incident
+- Support additional anomoly
+  1. hatch open 
+- state transaction  (Done)
+- realtime data streaming  (Done)
+- multi tag support (Done)
     1. modify the Json file format
     2. load the different tags (should work with the existing code)
     3. modify the data generation flow from one sensor and multi sensor
-- intergation with MQTT
+- intergation with MQTT (TODO)
+1. waiting for MQTT schema
 - intergation with Postgres
 - multi device readin
 - complex anomoly injection (stage 2)
+- month based batch creation (stage 2, test item)
 
 ## complex anomoly type
 
@@ -37,3 +62,5 @@ Voltage imbalances, surges, or poor-quality power can strain the motor and cause
 Problems like misaligned shafts, broken couplings, or worn-out parts can disrupt motor operation.
 ### Rotor or Stator Damage:(1) 
 Physical damage to the rotor or stator can result in reduced performance or complete failure.
+### unplaned power outage
+30 minutes, check powerpoints
