@@ -1,0 +1,7 @@
+{
+    "bale_counter_config.json": 1,
+    "hatch_status_config.json": 1,
+    "motor_monitor_config.json": 5,
+    "output_sensor_config.json": 1,
+    "temperature_config.json": 1
+  }

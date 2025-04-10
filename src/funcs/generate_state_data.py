@@ -7,6 +7,40 @@ from funcs.IoTDevice import IoTDevice
 import funcs.json_process as json_process
 
 
+def parse_entry(entry):
+    time_part, state_part = entry.split(" ", 1)
+    if ":" in time_part:
+        time_obj = datetime.strptime(time_part.lower(), "%I:%M%p").time()
+    else:
+        time_obj = datetime.strptime(time_part.lower(), "%I%p").time()
+    time_str = time_obj.strftime("%H:%M")
+    state_clean = state_part.replace("\\", " ")
+    return (time_str, state_clean)
+
+
+def inject_anomaly_by_time(df, anomaly, sensor_name, time_column="timestamp", target_column="feature_0"):
+    if anomaly["device"] != sensor_name:
+        return df
+    
+    df[time_column] = pd.to_datetime(df[time_column])
+
+    # Strip timezone if present
+    happen_time = pd.to_datetime(anomaly["HappenTime"]).tz_localize(None)
+
+    duration_minutes = int(anomaly["length"].replace("min", ""))
+    anomaly_value = float(anomaly["Value"])
+
+    time_diff = (df[time_column] - happen_time).abs()
+    start_idx = time_diff.idxmin()
+
+    end_time = happen_time + timedelta(minutes=duration_minutes)
+    mask = (df[time_column] >= happen_time) & (df[time_column] < end_time)
+
+    noise = np.random.uniform(-0.5, 0.5, size=mask.sum()) * 5
+    df.loc[mask, target_column] = anomaly_value + noise
+    df.loc[mask, "is_anomaly"] = True
+
+    return df
 
 
 def parse_state_timeline(state_entries, date="2025-04-07"):
@@ -51,6 +85,36 @@ def generate_state_based_data(state_schedule, state_ranges, ambient_temp, freq="
         )
         df_parts.append(df_part)
     return pd.concat(df_parts, ignore_index=True)
+
+def device_data_generation(generated_device):
+
+    #loading the configs
+    ambient_temp = generated_device.get_device_attribute("ambientTemperature")
+    tag_list = generated_device.get_device_attribute("tag_list")
+    synth_schedule = generated_device.get_synthesis_parameter("batch")
+    parsed_schedule = parse_state_timeline(synth_schedule)
+
+    anomoly_list = generated_device.get_synthesis_parameter("customAnomaly")
+    dfs = []
+
+    for sensor_name, config in tag_list.items():
+        state_ranges = {
+            state.lower(): (val["minIncrease"], val["maxIncrease"])
+            for state, val in config["states"].items()
+        }
+        if "temperature" in sensor_name.lower():
+            df = generate_state_based_data(parsed_schedule, state_ranges, ambient_temp)
+        else:
+            df = generate_state_based_data(parsed_schedule, state_ranges, 0)
+        for anomaly in anomoly_list:
+            inject_anomaly_by_time(df, anomaly, sensor_name)
+        df["sensor"] = sensor_name
+        dfs.append(df)
+
+    combined_df = pd.concat(dfs, ignore_index=True)
+
+    return dfs, combined_df
+
 
 
 

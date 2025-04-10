@@ -9,21 +9,21 @@
             "open": { "minIncrease": 1, "maxIncrease": 1 },
             "closed": { "minIncrease": 0, "maxIncrease": 0 }
           },
-          "hatches": [
-            { "name": "Bale Intake", "left": true, "right": true },
-            { "name": "Bale Unwinder", "left": false, "right": true },
-            { "name": "Preparation Table", "left": true, "right": true },
-            { "name": "Stone Crusher", "left": true, "right": true },
-            { "name": "Feeding Table", "left": true, "right": true },
-            { "name": "Debarking Unit 1", "left": true, "right": true },
-            { "name": "Debarking Unit 2", "left": true, "right": true },
-            { "name": "Scutching Unit 1", "left": true, "right": true },
-            { "name": "Scutching Unit 2", "left": true, "right": true },
-            { "name": "Scutching Unit 3", "left": true, "right": true },
-            { "name": "Scutching Unit 4", "left": true, "right": true },
-            { "name": "Fiber Combing", "left": true, "right": true },
-            { "name": "Fiber Packaging", "left": true, "right": true }
-          ]
+          "hatches": {
+            "Bale Intake": { "left": true, "right": true },
+            "Bale Unwinder": { "left": false, "right": true },
+            "Preparation Table": { "left": true, "right": true },
+            "Stone Crusher": { "left": true, "right": true },
+            "Feeding Table": { "left": true, "right": true },
+            "Debarking Unit 1": { "left": true, "right": true },
+            "Debarking Unit 2": { "left": true, "right": true },
+            "Scutching Unit 1": { "left": true, "right": true },
+            "Scutching Unit 2": { "left": true, "right": true },
+            "Scutching Unit 3": { "left": true, "right": true },
+            "Scutching Unit 4": { "left": true, "right": true },
+            "Fiber Combing": { "left": true, "right": true },
+            "Fiber Packaging": { "left": true, "right": true }
+          }
         }
       },
       "ambientTemperature": 20,
