@@ -1,0 +1,55 @@
+{
+    "device_info": {
+      "topic": "factory/line1/device999/hatchSensor",
+      "tag_list": {
+        "hatchSensor": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          },
+          "hatches": [
+            { "name": "Bale Intake", "left": true, "right": true },
+            { "name": "Bale Unwinder", "left": false, "right": true },
+            { "name": "Preparation Table", "left": true, "right": true },
+            { "name": "Stone Crusher", "left": true, "right": true },
+            { "name": "Feeding Table", "left": true, "right": true },
+            { "name": "Debarking Unit 1", "left": true, "right": true },
+            { "name": "Debarking Unit 2", "left": true, "right": true },
+            { "name": "Scutching Unit 1", "left": true, "right": true },
+            { "name": "Scutching Unit 2", "left": true, "right": true },
+            { "name": "Scutching Unit 3", "left": true, "right": true },
+            { "name": "Scutching Unit 4", "left": true, "right": true },
+            { "name": "Fiber Combing", "left": true, "right": true },
+            { "name": "Fiber Packaging", "left": true, "right": true }
+          ]
+        }
+      },
+      "ambientTemperature": 20,
+      "location": "Toronto, ON",
+      "factoryName": "MainFactory1",
+      "calibrationDate": "2025-01-01"
+    },
+    "synth_detial": {
+      "mode": "batch",
+      "batch": [
+        "8am closed", "9am open", "10am closed", "12pm closed",
+        "2pm closed", "3pm closed"
+      ],
+      "customAnomaly": [
+        {
+          "HappenTime": "2025-04-07T14:30:00Z",
+          "Type": "Unexpected Opening",
+          "length": "5min",
+          "Value": "1"
+        }
+      ]
+    },
+    "network_info": {
+      "mqttEndpoint": "mqtt://broker.hivemq.com",
+      "databaseEndpoint": "https://db.factory.local/api",
+      "fileEndpoint": "https://files.factory.local/uploads"
+    }
+  }
+  

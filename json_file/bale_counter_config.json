@@ -1,0 +1,65 @@
+{
+    "device_info": {
+      "topic": "factory/line1/device456/baleCounter",
+      "tag_list": {
+        "bales": {
+          "tagUnit": "count",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 8, "maxIncrease": 10 },
+            "idle": { "minIncrease": 0, "maxIncrease": 1 },
+            "off":  { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "total_weight": {
+          "tagUnit": "kg",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 2300, "maxIncrease": 2600 },
+            "idle": { "minIncrease": 0, "maxIncrease": 100 },
+            "off":  { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "average_weight": {
+          "tagUnit": "kg",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 268, "maxIncrease": 275 },
+            "idle": { "minIncrease": 0, "maxIncrease": 0 },
+            "off":  { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        }
+      },
+      "ambientTemperature": 22,
+      "location": "Toronto, ON",
+      "factoryName": "MainFactory1",
+      "calibrationDate": "2025-01-01"
+    },
+    "synth_detial": {
+      "mode": "batch",
+      "batch": [
+        "6am off", "8am run", "11am idle", "12pm run",
+        "2pm run", "5pm idle", "7pm run", "10pm off"
+      ],
+      "customAnomaly": [
+        {
+          "HappenTime": "2025-04-07T14:00:00Z",
+          "Type": "Overweight Spike",
+          "length": "15min",
+          "Value": "2800"
+        },
+        {
+          "HappenTime": "2025-04-07T20:30:00Z",
+          "Type": "Undercount",
+          "length": "10min",
+          "Value": "3"
+        }
+      ]
+    },
+    "network_info": {
+      "mqttEndpoint": "mqtt://broker.hivemq.com",
+      "databaseEndpoint": "https://db.factory.local/api",
+      "fileEndpoint": "https://files.factory.local/uploads"
+    }
+  }
+  

@@ -1,0 +1,74 @@
+{
+    "device_info": {
+      "topic": "factory/line1/device001/motorMonitor",
+      "tag_list": {
+        "temperature": {
+          "tagUnit": "Celsius",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 60, "maxIncrease": 105 },
+            "idle": { "minIncrease": 30, "maxIncrease": 50 },
+            "off": { "minIncrease": 20, "maxIncrease": 25 }
+          }
+        },
+        "vibration": {
+          "tagUnit": "mm/s",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 95, "maxIncrease": 105 },
+            "idle": { "minIncrease": 70, "maxIncrease": 90 },
+            "off": { "minIncrease": 5, "maxIncrease": 10 }
+          }
+        },
+        "rpm": {
+          "tagUnit": "rpm",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 95, "maxIncrease": 130 },
+            "idle": { "minIncrease": 30, "maxIncrease": 60 },
+            "off": { "minIncrease": 0, "maxIncrease": 5 }
+          }
+        },
+        "power": {
+          "tagUnit": "kW",
+          "samplingRate": "1Hz",
+          "states": {
+            "run": { "minIncrease": 95, "maxIncrease": 150 },
+            "idle": { "minIncrease": 50, "maxIncrease": 90 },
+            "off": { "minIncrease": 0, "maxIncrease": 10 }
+          }
+        }
+      },
+      "ambientTemperature": 22.0,
+      "location": "Toronto, ON",
+      "factoryName": "MainFactory1",
+      "calibrationDate": "2025-01-01"
+    },
+    "synth_detial": {
+      "mode": "batch",
+      "batch": [
+        "8am off", "9am idle", "9:30am run", "10:30am idle",
+        "11am run", "2pm idle", "3pm run", "6pm off"
+      ],
+      "customAnomaly": [
+        {
+          "HappenTime": "2025-04-07T10:15:00Z",
+          "Type": "Overheat",
+          "length": "10min",
+          "Value": "115.0"
+        },
+        {
+          "HappenTime": "2025-04-07T15:00:00Z",
+          "Type": "RPM Spike",
+          "length": "5min",
+          "Value": "160.0"
+        }
+      ]
+    },
+    "network_info": {
+      "mqttEndpoint": "mqtt://broker.hivemq.com",
+      "databaseEndpoint": "https://db.factory.local/api",
+      "fileEndpoint": "https://files.factory.local/uploads"
+    }
+  }
+  
