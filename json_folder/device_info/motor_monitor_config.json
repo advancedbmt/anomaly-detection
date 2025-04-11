@@ -52,6 +52,7 @@
       ],
       "customAnomaly": [
         {
+          "sensor": 1,
           "HappenTime": "2025-04-07T10:15:00Z",
           "Type": "Overheat",
           "length": "10min",
@@ -59,6 +60,7 @@
           "tag": "temperature"
         },
         {
+          "sensor": 2,
           "HappenTime": "2025-04-07T15:00:00Z",
           "Type": "RPM Spike",
           "length": "5min",

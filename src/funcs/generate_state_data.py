@@ -86,7 +86,7 @@ def generate_state_based_data(state_schedule, state_ranges, ambient_temp, freq="
         df_parts.append(df_part)
     return pd.concat(df_parts, ignore_index=True)
 
-def device_data_generation(generated_device):
+def device_data_generation(generated_device, synth_id):
 
     #loading the configs
     ambient_temp = generated_device.get_device_attribute("ambientTemperature")
@@ -107,7 +107,12 @@ def device_data_generation(generated_device):
         else:
             df = generate_state_based_data(parsed_schedule, state_ranges, 0)
         for anomaly in anomoly_list:
-            inject_anomaly_by_time(df, anomaly, sensor_name)
+            if "sensor" in anomaly:
+                if anomaly["sensor"]==synth_id:
+                    print(f"Injecting anomaly for {sensor_name} with ID {synth_id}")
+                    inject_anomaly_by_time(df, anomaly, sensor_name)
+            else:
+                inject_anomaly_by_time(df, anomaly, sensor_name)
         df["sensor"] = sensor_name
         dfs.append(df)
 

@@ -2,27 +2,204 @@
     "device_info": {
       "topic": "factory/line1/device999/hatchSensor",
       "tag_list": {
-        "hatchSensor": {
+        "Bale_Intake_Left": {
           "tagUnit": "state",
           "samplingRate": "1Hz",
           "states": {
             "open": { "minIncrease": 1, "maxIncrease": 1 },
             "closed": { "minIncrease": 0, "maxIncrease": 0 }
-          },
-          "hatches": {
-            "Bale Intake": { "left": true, "right": true },
-            "Bale Unwinder": { "left": false, "right": true },
-            "Preparation Table": { "left": true, "right": true },
-            "Stone Crusher": { "left": true, "right": true },
-            "Feeding Table": { "left": true, "right": true },
-            "Debarking Unit 1": { "left": true, "right": true },
-            "Debarking Unit 2": { "left": true, "right": true },
-            "Scutching Unit 1": { "left": true, "right": true },
-            "Scutching Unit 2": { "left": true, "right": true },
-            "Scutching Unit 3": { "left": true, "right": true },
-            "Scutching Unit 4": { "left": true, "right": true },
-            "Fiber Combing": { "left": true, "right": true },
-            "Fiber Packaging": { "left": true, "right": true }
+          }
+        },
+        "Bale_Intake_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Bale_Unwinder_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Preparation_Table_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Preparation_Table_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Stone_Crusher_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Stone_Crusher_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Feeding_Table_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Feeding_Table_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Debarking_Unit_1_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Debarking_Unit_1_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Debarking_Unit_2_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Debarking_Unit_2_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_1_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_1_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_2_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_2_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_3_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_3_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_4_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Scutching_Unit_4_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Fiber_Combing_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Fiber_Combing_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Fiber_Packaging_Left": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
+          }
+        },
+        "Fiber_Packaging_Right": {
+          "tagUnit": "state",
+          "samplingRate": "1Hz",
+          "states": {
+            "open": { "minIncrease": 1, "maxIncrease": 1 },
+            "closed": { "minIncrease": 0, "maxIncrease": 0 }
           }
         }
       },
@@ -43,7 +220,7 @@
           "Type": "Unexpected Opening",
           "length": "5min",
           "Value": "1",
-          "tag": "Bale Intake"
+          "tag": "Fiber_Packaging_Right"
         }
       ]
     },
