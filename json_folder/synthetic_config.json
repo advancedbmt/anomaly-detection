@@ -1,0 +1,107 @@
+{
+    "synthesis": {
+      "motor_monitor": {
+        "mode": "batch",
+        "batch": [
+          "8am off", "9am idle", "9:30am run", "10:30am idle",
+          "11am run", "2pm idle", "3pm run", "6pm off"
+        ],
+        "customAnomaly": [
+          {
+            "HappenTime": "2025-04-07T10:15:00Z",
+            "Type": "Overheat",
+            "length": "10min",
+            "Value": "115.0",
+            "tag": "temperature"
+          },
+          {
+            "HappenTime": "2025-04-07T15:00:00Z",
+            "Type": "RPM Spike",
+            "length": "5min",
+            "Value": "160.0",
+            "tag": "rpm"
+          }
+        ]
+      },
+      "bale_counter": {
+        "mode": "batch",
+        "batch": [
+          "6am off", "8am run", "11am idle", "12pm run",
+          "2pm run", "5pm idle", "7pm run", "10pm off"
+        ],
+        "customAnomaly": [
+          {
+            "HappenTime": "2025-04-07T14:00:00Z",
+            "Type": "Overweight Spike",
+            "length": "15min",
+            "Value": "2800",
+            "tag": "total_weight"
+          },
+          {
+            "HappenTime": "2025-04-07T20:30:00Z",
+            "Type": "Undercount",
+            "length": "10min",
+            "Value": "3",
+            "tag": "bales"
+          }
+        ]
+      },
+      "hatch_status": {
+        "mode": "batch",
+        "batch": [
+          "8am closed", "9am open", "10am closed", "12pm closed",
+          "2pm closed", "3pm closed"
+        ],
+        "customAnomaly": [
+          {
+            "HappenTime": "2025-04-07T14:30:00Z",
+            "Type": "Unexpected Opening",
+            "length": "5min",
+            "Value": "1",
+            "tag": "Fiber_Packaging_Right"
+          }
+        ]
+      },
+      "output_sensor": {
+        "mode": "batch",
+        "batch": [
+          "8am long_fiber", "9am short_fiber", "10am hurd",
+          "12pm long_fiber", "2pm short_fiber", "3pm hurd"
+        ],
+        "customAnomaly": [
+          {
+            "HappenTime": "2025-04-07T14:00:00Z",
+            "Type": "Unexpected Drop",
+            "length": "10min",
+            "Value": "100.0",
+            "tag": "hurd"
+          }
+        ]
+      },
+      "temperature_bank": {
+        "mode": "batch",
+        "batch": [
+          "12:00am off", "1:30am idle", "2am run",
+          "8am off", "9am idle", "9:30am run", "9:45am idle", "10am run",
+          "5pm idle", "5:30pm run", "11:59pm run"
+        ],
+        "customAnomaly": [
+          {
+            "HappenTime": "2025-04-07T13:00:00Z",
+            "Type": "Overheat",
+            "length": "5min",
+            "Value": "95.7",
+            "tag": "temperatureSensor1"
+          },
+          {
+            "HappenTime": "2025-04-07T16:45:00Z",
+            "Type": "Spike",
+            "length": "10min",
+            "Value": "102.3",
+            "tag": "temperatureSensor1"
+          }
+        ]
+      }
+    }
+  }
+  

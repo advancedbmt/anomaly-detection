@@ -1,0 +1,72 @@
+{
+    "devices": {
+      "motor_monitor": {
+        "topic": "factory/line1/device001/motorMonitor",
+        "tag_list": {
+          "temperature": { "tagUnit": "Celsius", "samplingRate": "1Hz" },
+          "vibration": { "tagUnit": "mm/s", "samplingRate": "1Hz" },
+          "rpm": { "tagUnit": "rpm", "samplingRate": "1Hz" },
+          "power": { "tagUnit": "kW", "samplingRate": "1Hz" }
+        },
+        "ambientTemperature": 22.0
+      },
+      "bale_counter": {
+        "topic": "factory/line1/device456/baleCounter",
+        "tag_list": {
+          "bales": { "tagUnit": "count", "samplingRate": "1Hz" },
+          "total_weight": { "tagUnit": "kg", "samplingRate": "1Hz" },
+          "average_weight": { "tagUnit": "kg", "samplingRate": "1Hz" }
+        },
+        "ambientTemperature": 22.0
+      },
+      "hatch_status": {
+        "topic": "factory/line1/device999/hatchSensor",
+        "tag_list": {
+          "Bale_Intake_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Bale_Intake_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Bale_Unwinder_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Preparation_Table_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Preparation_Table_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Stone_Crusher_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Stone_Crusher_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Feeding_Table_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Feeding_Table_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Debarking_Unit_1_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Debarking_Unit_1_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Debarking_Unit_2_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Debarking_Unit_2_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_1_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_1_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_2_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_2_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_3_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_3_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_4_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Scutching_Unit_4_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Fiber_Combing_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Fiber_Combing_Right": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Fiber_Packaging_Left": { "tagUnit": "state", "samplingRate": "1Hz" },
+          "Fiber_Packaging_Right": { "tagUnit": "state", "samplingRate": "1Hz" }
+        },
+        "ambientTemperature": 20.0
+      },
+      "output_sensor": {
+        "topic": "factory/line1/device456/outputSensor",
+        "tag_list": {
+          "outputSensor1": { "tagUnit": "kg/hr", "samplingRate": "1Hz" }
+        },
+        "ambientTemperature": 20.0
+      },
+      "temperature_bank": {
+        "topic": "factory/line1/device123/temperatureSensor",
+        "tag_list": {
+          "temperatureSensor1": { "tagUnit": "Celsius", "samplingRate": "1Hz" },
+          "temperatureSensor2": { "tagUnit": "Celsius", "samplingRate": "1Hz" },
+          "temperatureSensor3": { "tagUnit": "Celsius", "samplingRate": "1Hz" },
+          "temperatureSensor4": { "tagUnit": "Celsius", "samplingRate": "1Hz" }
+        },
+        "ambientTemperature": 20.0
+      }
+    }
+  }
+      
