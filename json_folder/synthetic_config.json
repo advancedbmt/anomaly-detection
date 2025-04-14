@@ -3,8 +3,11 @@
       "motor_monitor": {
         "mode": "batch",
         "batch": [
-          "8am off", "9am idle", "9:30am run", "10:30am idle",
-          "11am run", "2pm idle", "3pm run", "6pm off"
+          "12:00am off",          
+          "1:30am idle", "2am run",
+          "8am off", "9am idle", "9:30am run", "9:45am idle", "10am run",
+          "5pm idle", "5:30pm run",
+          "11:59pm run" 
         ],
         "customAnomaly": [
           {
@@ -26,8 +29,11 @@
       "bale_counter": {
         "mode": "batch",
         "batch": [
-          "6am off", "8am run", "11am idle", "12pm run",
-          "2pm run", "5pm idle", "7pm run", "10pm off"
+          "12:00am off",          
+          "1:30am idle", "2am run",
+          "8am off", "9am idle", "9:30am run", "9:45am idle", "10am run",
+          "5pm idle", "5:30pm run",
+          "11:59pm run" 
         ],
         "customAnomaly": [
           {
@@ -49,8 +55,8 @@
       "hatch_status": {
         "mode": "batch",
         "batch": [
-          "8am closed", "9am open", "10am closed", "12pm closed",
-          "2pm closed", "3pm closed"
+        "8am closed", "9am open", "10am closed", "12pm closed",
+        "2pm closed", "3pm closed"
         ],
         "customAnomaly": [
           {
@@ -65,8 +71,11 @@
       "output_sensor": {
         "mode": "batch",
         "batch": [
-          "8am long_fiber", "9am short_fiber", "10am hurd",
-          "12pm long_fiber", "2pm short_fiber", "3pm hurd"
+          "12:00am long_fiber",          
+          "1:30am short_fiber", "2am hurd",
+          "8am long_fiber", "9am short_fiber", "9:30am hurd", "9:45am short_fiber", "10am hurd",
+          "5pm short_fiber", "5:30pm hurd",
+          "11:59pm hurd" 
         ],
         "customAnomaly": [
           {
@@ -74,16 +83,18 @@
             "Type": "Unexpected Drop",
             "length": "10min",
             "Value": "100.0",
-            "tag": "hurd"
+            "tag": "output"
           }
         ]
       },
-      "temperature_bank": {
+      "temperature_sensor": {
         "mode": "batch",
         "batch": [
-          "12:00am off", "1:30am idle", "2am run",
+          "12:00am off",          
+          "1:30am idle", "2am run",
           "8am off", "9am idle", "9:30am run", "9:45am idle", "10am run",
-          "5pm idle", "5:30pm run", "11:59pm run"
+          "5pm idle", "5:30pm run",
+          "11:59pm run" 
         ],
         "customAnomaly": [
           {
@@ -102,6 +113,14 @@
           }
         ]
       }
-    }
+    },
+
+    "incidents": [
+  {
+    "type": "Overheating",
+    "startTime": "2025-04-08T14:30:00Z",
+    "duration": "10min"
+  }
+]
   }
   

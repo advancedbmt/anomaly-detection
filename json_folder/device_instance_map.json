@@ -1,7 +1,7 @@
 {
-  "motor_monitor": 5,
+  "motor_monitor": 1,
   "bale_counter": 1,
   "hatch_status": 1,
   "output_sensor": 1,
-  "temperature_bank": 1
+  "temperature_sensor": 1
 }

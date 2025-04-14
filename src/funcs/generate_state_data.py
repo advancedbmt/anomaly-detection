@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+import random
 
 from funcs.IoTDevice import IoTDevice
 import funcs.json_process as json_process
@@ -37,7 +38,11 @@ def inject_anomaly_by_time(df, anomaly, sensor_name, time_column="timestamp", ta
     mask = (df[time_column] >= happen_time) & (df[time_column] < end_time)
 
     noise = np.random.uniform(-0.5, 0.5, size=mask.sum()) * 5
-    df.loc[mask, target_column] = anomaly_value + noise
+    if anomaly_value >= 1.2 and anomaly_value <= 2.0:
+        print(f"⚠️ Injecting anomaly for {sensor_name} at {happen_time} with value {anomaly_value}")
+        df.loc[mask, target_column] = df.loc[mask, target_column] * anomaly_value + noise
+    else:
+        df.loc[mask, target_column] = anomaly_value + noise
     df.loc[mask, "is_anomaly"] = True
 
     return df
@@ -98,6 +103,10 @@ def device_data_generation(generated_device, synth_id):
     dfs = []
 
     for sensor_name, config in tag_list.items():
+        if "states" not in config:
+            print(f"Skipping sensor {sensor_name} — no 'states' defined.")
+            continue
+
         state_ranges = {
             state.lower(): (val["minIncrease"], val["maxIncrease"])
             for state, val in config["states"].items()
@@ -119,6 +128,8 @@ def device_data_generation(generated_device, synth_id):
     combined_df = pd.concat(dfs, ignore_index=True)
 
     return dfs, combined_df
+
+
 
 
 
