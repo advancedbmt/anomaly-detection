@@ -1,23 +1,69 @@
+# This script compares the actual detected anomalies with expected ones.
+# It evaluates precision, recall, F1-score and shows a confusion matrix for each sensor.
+
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
 
-def evaluate_device(device_name):
-    expected_path = f"TESTCASE/expected/{device_name}_expected.csv"
-    predicted_path = f"TESTCASE/results/{device_name}_predicted.csv"
+# Import expected and actual results from the other test case files
+from test_cases import expected_outputs, run_detection
 
-    expected = pd.read_csv(expected_path)
-    predicted = pd.read_csv(predicted_path)
+# List of synthetic files to evaluate
+CSV_FILES = [
+    "motor_monitor_synthetic.csv",
+    "bale_counter_synthetic.csv",
+    "temperature_bank_synthetic.csv"
+]
 
-    # Merge on timestamp and sensor
-    merged = pd.merge(expected, predicted, on=["timestamp", "sensor"])
+# Load expected and actual results
+actual_results = run_detection.actual_results
+expected_results = expected_outputs.expected_results
 
-    y_true = merged["is_anomaly"]
-    y_pred = merged["is_anomaly_pred"]
+# This dictionary will store evaluation report for each device and sensor
+evaluation_summary = {}
 
-    print(f"\n📊 Evaluation for device: {device_name}")
-    print(confusion_matrix(y_true, y_pred))
-    print(classification_report(y_true, y_pred, digits=3))
+# Iterate through each file and compare actual vs expected
+for file_name in CSV_FILES:
+    # Skip files missing from either dict
+    if file_name not in expected_results or file_name not in actual_results:
+        continue
 
-# Example usage
-if __name__ == "__main__":
-    evaluate_device("motor_monitor")
+    expected = expected_results[file_name]
+    actual = actual_results[file_name]
+
+    file_report = {}
+
+    for sensor_name in expected:
+        # Convert timestamps to datetime objects and round to minute
+        expected_times = expected.get(sensor_name, [])
+        actual_times = actual.get(sensor_name, [])
+
+        expected_set = set(pd.to_datetime(expected_times).round("min"))
+        actual_set = set(pd.to_datetime(actual_times).round("min"))
+
+        # Create a unified list of timestamps
+        all_times = sorted(expected_set.union(actual_set))
+
+        # Create binary vectors: 1 = anomaly, 0 = normal
+        y_true = [1 if t in expected_set else 0 for t in all_times]
+        y_pred = [1 if t in actual_set else 0 for t in all_times]
+
+        if not y_true:
+            continue
+
+        # Compute confusion matrix and classification report
+        cm = confusion_matrix(y_true, y_pred)
+        report = classification_report(y_true, y_pred, output_dict=True)
+
+        file_report[sensor_name] = {
+            "confusion_matrix": cm.tolist(),
+            "precision": round(report['1']['precision'], 2),
+            "recall": round(report['1']['recall'], 2),
+            "f1_score": round(report['1']['f1-score'], 2)
+        }
+
+    # Store per file
+    evaluation_summary[file_name] = file_report
+
+# Pretty print the results
+import json
+print(json.dumps(evaluation_summary, indent=4))
