@@ -67,3 +67,9 @@ for file_name in CSV_FILES:
 # Pretty print the results
 import json
 print(json.dumps(evaluation_summary, indent=4))
+
+
+#timestamp
+#feature_0
+#sensor
+#state

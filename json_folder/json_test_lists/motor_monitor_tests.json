@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Anomaly - vibration",
+    "sensor": "vibration",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T10:03:00Z",
+    "Value": 99.8
+  },
+  {
+    "name": "Normal - temperature",
+    "sensor": "temperature",
+    "expected_label": 0,
+    "HappenTime": "2025-04-07T16:46:00Z",
+    "Value": 93.3
+  },
+  {
+    "name": "Anomaly - vibration",
+    "sensor": "vibration",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T17:49:00Z",
+    "Value": 106.1
+  },
+  {
+    "name": "Normal - temperature",
+    "sensor": "temperature",
+    "expected_label": 0,
+    "HappenTime": "2025-04-07T10:37:00Z",
+    "Value": 92.4
+  },
+  {
+    "name": "Normal - temperature",
+    "sensor": "temperature",
+    "expected_label": 0,
+    "HappenTime": "2025-04-07T18:40:00Z",
+    "Value": 63.7
+  },
+  {
+    "name": "Normal - vibration",
+    "sensor": "vibration",
+    "expected_label": 0,
+    "HappenTime": "2025-04-07T18:22:00Z",
+    "Value": 7.9
+  }
+]
