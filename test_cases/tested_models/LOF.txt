@@ -1,0 +1,5 @@
+High Recall = all 15 anomalies were detected (✅ good).
+
+Very Low Precision = the model flagged 187 non-anomalous points as anomalies (❌ not acceptable).
+
+Conclusion: The model is too sensitive — it's finding every anomaly but also labeling a lot of normal values incorrectly.

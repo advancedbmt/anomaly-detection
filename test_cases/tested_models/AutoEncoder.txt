@@ -1,0 +1,15 @@
+🧠 Interpretation:
+High accuracy (99%) is misleading since the model never detected any of the known anomalies.
+
+Recall = 0.00 for anomalies → ❌ missed all anomaly cases.
+
+Precision for anomalies = 0.00 → model didn’t predict any anomalies correctly.
+
+F1-score = 0.00 for anomalies → severe failure in detecting true positives.
+
+⚠️ Conclusion:
+The AutoEncoder in its current configuration is not effective for detecting anomalies in this dataset. It behaves similarly to PCA and Elliptic Envelope:
+
+All anomalies are missed.
+
+The model likely overfits the normal pattern and underestimates deviations

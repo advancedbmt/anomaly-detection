@@ -1,0 +1,21 @@
+📌 Interpretation
+Perfect Precision on Normal Data (✅): Model never falsely predicted anomalies.
+
+Zero Recall on Anomalies (❌): Model missed all 15 actual anomalies.
+
+F1 Score (❌): For the anomaly class, F1 is 0.00, indicating it failed completely at detecting true anomalies.
+
+
+⚠️ Conclusion
+High Precision (for normal data) = Model is extremely conservative.
+
+Zero Recall (for anomalies) = Model is not detecting actual issues.
+
+Overall: PCA is not suitable in this case. It's too "safe" and avoids labeling anything as an anomaly.
+
+
+✅ Summary (in your preferred style):
+High Precision = model perfectly avoided false alarms on normal data (✅ good).
+Zero Recall = model failed to detect any of the 15 true anomalies (❌ critical failure).
+
+Conclusion: PCA is too conservative and cannot be trusted for anomaly detection in this case.
