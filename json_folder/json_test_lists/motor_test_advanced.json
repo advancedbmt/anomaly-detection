@@ -1,0 +1,44 @@
+[
+    {
+      "name": "anomoly - extanded maintance",
+      "sensor": "temperature",
+      "expected_label": 0,
+      "HappenTime": "2025-04-07T09:00:00Z",
+      "Value": 85.0
+    },
+
+    {
+        "name": "anomoly - reoccuring unscheduled error",
+        "sensor": "temperature",
+        "expected_label": 0,
+        "HappenTime": "2025-04-07T09:00:00Z",
+        "Value": 85.0
+    },
+
+    {
+        "name": "Power Off",
+        "sensor": "temperature",
+        "expected_label": 0,
+        "HappenTime": "2025-04-07T09:00:00Z",
+        "Value": 85.0
+    },
+
+    {
+        "name": "overheat",
+        "sensor": "temperature",
+        "expected_label": 0,
+        "HappenTime": "2025-04-07T09:00:00Z",
+        "Value": 85.0
+    },
+
+    {
+        "name": "unusual vibration",
+        "sensor": "temperature",
+        "expected_label": 0,
+        "HappenTime": "2025-04-07T09:00:00Z",
+        "Value": 85.0
+    }
+  
+  
+  
+  ]

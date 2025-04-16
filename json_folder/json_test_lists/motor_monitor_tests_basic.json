@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Normal",
+    "sensor": "temperature",
+    "expected_label": 0,
+    "HappenTime": "2025-04-07T09:00:00Z",
+    "Value": 85.0
+  },
+  {
+    "name": "Anomaly - temperature - high",
+    "sensor": "temperature",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T10:15:00Z",
+    "Value": 115.0
+  },
+  {
+    "name": "Anomaly - rpm - high",
+    "sensor": "rpm",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T15:00:00Z",
+    "Value": 160.0
+  },
+  {
+    "name": "Anomaly - power - high",
+    "sensor": "power",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T16:00:00Z",
+    "Value": 145.0
+  },
+  {
+    "name": "Anomaly - vibration - high",
+    "sensor": "vibration",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T17:00:00Z",
+    "Value": 150.0
+  },
+  {
+    "name": "Anomaly - temperature - low",
+    "sensor": "temperature",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T10:15:00Z",
+    "Value": 22.0
+  },
+  {
+    "name": "Anomaly - rpm - low",
+    "sensor": "rpm",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T15:00:00Z",
+    "Value": 20.0
+  },
+  {
+    "name": "Anomaly - power - low",
+    "sensor": "power",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T16:00:00Z",
+    "Value": 15.0
+  },
+  {
+    "name": "Anomaly - vibration - low",
+    "sensor": "vibration",
+    "expected_label": 1,
+    "HappenTime": "2025-04-07T17:00:00Z",
+    "Value": 30.0
+  },
+
+  {
+    "name": "Anomaly - combined sensors",
+    "sensor": "vibration",
+    "expected_label": 3,
+    "HappenTime": "2025-04-07T17:00:00Z",
+    "Value": 30.0
+  }
+
+
+
+
+]
