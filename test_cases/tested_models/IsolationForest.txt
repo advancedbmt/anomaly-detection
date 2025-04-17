@@ -1,0 +1,21 @@
+based on the first sensor "power" here are the results:
+Accuracy Metrics
+True Anomalies (Support): 15
+
+True Positives: 0
+
+False Positives: 199
+
+True Negatives: 19932
+
+False Negatives: 15
+
+Recall = 0.00 → No anomalies were detected (❌ very bad).
+
+Precision = 0.00 → The model predicted 199 anomalies, but none were correct (❌ unacceptable).
+
+High Specificity = 99.00+% → It correctly labels normal values (✅ decent for normal class).
+
+🧠 Conclusion
+❌ The model is completely ineffective for detecting anomalies in the power sensor.
+It confidently marks many false alarms while missing all the real ones.

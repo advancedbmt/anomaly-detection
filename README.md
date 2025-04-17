@@ -1,3 +1,3 @@
-# Anomoly Detection
+# Anomaly Detection
 ## TODOS
 
