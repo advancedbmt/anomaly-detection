@@ -1,0 +1,8 @@
+property,value
+os,Linux
+os_version,#1 SMP Sun Jan 10 15:06:54 PST 2016
+cpu_count_logical,32
+cpu_count_physical,32
+memory_total_mb,1024.0
+disk_total_gb,8589934592.0
+timestamp,2025-04-30T21:30:06.716986
