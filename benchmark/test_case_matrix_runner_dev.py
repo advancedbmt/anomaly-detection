@@ -1,121 +1,91 @@
+import os
 import time
+import pandas as pd
 from benchmark_utils import benchmark_device
 from multi_device_pipeline_final_updated_with_rf_plot import process_device
 
-# 🧪 Full benchmark test cases (production scale)
-
-# TEST_CASES = [
-#     {"test_id": 1, "motor": 1, "bale": 1, "pump": 1, "interval": 0.1, "duration_min": 0.1},
-#     {"test_id": 2, "motor": 3, "bale": 1, "pump": 3, "interval": 0.1, "duration_min": 0.1}
-# ]
-
+# ⚙️ Updated test cases with temperature sensor included
 TEST_CASES = [
-    {"test_id": 1, "motor": 1, "bale": 1, "pump": 1, "interval": 1, "duration_min": 5},
-    {
-        "test_id": 2,
-        "motor": 10,
-        "bale": 1,
-        "pump": 10,
-        "interval": 1,
-        "duration_min": 5,
-    },
-    {
-        "test_id": 3,
-        "motor": 25,
-        "bale": 1,
-        "pump": 25,
-        "interval": 1,
-        "duration_min": 5,
-    },
-    {
-        "test_id": 4,
-        "motor": 50,
-        "bale": 1,
-        "pump": 50,
-        "interval": 1,
-        "duration_min": 5,
-    },
-    {
-        "test_id": 5,
-        "motor": 75,
-        "bale": 1,
-        "pump": 75,
-        "interval": 1,
-        "duration_min": 5,
-    },
-    {
-        "test_id": 6,
-        "motor": 100,
-        "bale": 1,
-        "pump": 100,
-        "interval": 1,
-        "duration_min": 5,
-    },
-    {
-        "test_id": 7,
-        "motor": 50,
-        "bale": 1,
-        "pump": 50,
-        "interval": 5,
-        "duration_min": 10,
-    },
-    {
-        "test_id": 8,
-        "motor": 50,
-        "bale": 1,
-        "pump": 50,
-        "interval": 10,
-        "duration_min": 15,
-    },
-    {
-        "test_id": 9,
-        "motor": 50,
-        "bale": 1,
-        "pump": 50,
-        "interval": 15,
-        "duration_min": 20,
-    },
+    {"test_id": 1, "motor": 1, "bale": 1, "pump": 1, "temp": 1, "interval": 0.1, "duration_min": 0.1},
+    {"test_id": 2, "motor": 3, "bale": 1, "pump": 3, "temp": 3, "interval": 0.1, "duration_min": 0.1}
 ]
 
-# File paths for each device
-MOTOR_FILE = "motor_monitor_0_unified.csv"
-BALE_FILE = "bale_counter_0_unified.csv"
-PUMP_FILE = "output_sensor_0_unified.csv"
+# 📂 Unified CSV filenames
+DEVICE_FILE_MAP = {
+    "motor_monitor": "motor_monitor_0_unified.csv",
+    "bale_counter": "bale_counter_0_unified.csv",
+    "output_sensor": "output_sensor_0_unified.csv",
+    "temperature_sensor": "temperature_sensor_0_unified.csv"
+}
 
+# 🧠 Caches
+CSV_CACHE = {}
+MODEL_CACHE = {}
+
+BASE_DIR = os.path.dirname(__file__)
+DEVICES_DATA_PATH = os.path.abspath(os.path.join(BASE_DIR, "../src/devices_data"))
+
+def process_device_with_cache(device_type, csv_file):
+    # ✅ Load and cache CSV once
+    if csv_file not in CSV_CACHE:
+        full_path = os.path.join(DEVICES_DATA_PATH, csv_file)
+        print(f"📄 Loading CSV: {full_path}")
+        if not os.path.exists(full_path):
+            raise FileNotFoundError(f"❌ File not found: {full_path}")
+        df = pd.read_csv(full_path)
+        df['timestamp'] = pd.to_datetime(df['timestamp'])
+        CSV_CACHE[csv_file] = df
+
+    # ✅ Placeholder for future model preloading
+    if device_type not in MODEL_CACHE:
+        MODEL_CACHE[device_type] = {}
+
+    return process_device(device_type, csv_file, suppress_plot=True)
 
 def run_test_case(test):
     print(f"\n=== Running Test Case #{test['test_id']} ===")
-    device_map = {
-        "motor_monitor": (MOTOR_FILE, test["motor"]),
-        "bale_counter": (BALE_FILE, test["bale"]),
-        "output_sensor": (PUMP_FILE, test["pump"]),
-    }
+    total_ticks = int((test["duration_min"] * 60) / test["interval"])
 
-    total_runs = int(test["duration_min"] * 60 / test["interval"])
+    for tick in range(total_ticks):
+        print(f"\n⏱️ Tick {tick + 1}/{total_ticks}")
+        tick_start = time.time()
 
-    for tick in range(total_runs):
-        is_real_tick = tick % 10 == 0  # Run real model every 10th tick
-        print(f"⏱️ Tick {tick + 1}/{total_runs} {'[REAL]' if is_real_tick else '[DRY]'}")
+        for device_type in DEVICE_FILE_MAP:
+            # Map device_type to test dictionary key (motor, bale, pump, temp)
+            short_key = {
+                "motor_monitor": "motor",
+                "bale_counter": "bale",
+                "output_sensor": "pump",
+                "temperature_sensor": "temp"
+            }[device_type]
 
-        for device_type, (file, count) in device_map.items():
+            count = test.get(short_key, 0)
+            csv_file = DEVICE_FILE_MAP[device_type]
+
             for i in range(count):
+                start = time.time()
+
                 benchmark_device(
-                    device_type,
-                    file,
-                    process_device,
-                    dry_run=True,
-                    test_case_id=test["test_id"],
+                    device_type=device_type,
+                    csv_file=csv_file,
+                    process_fn=process_device_with_cache,
+                    dry_run=False,
+                    test_case_id=test["test_id"]
                 )
 
-        time.sleep(test["interval"])
+                elapsed = time.time() - start
+                print(f"⏳ {device_type} call {i + 1}/{count} took {elapsed:.2f} sec")
 
-    print(f"✅ Test Case #{test['test_id']} completed.\n")
+        # ⏱️ Keep tick interval constant
+        tick_elapsed = time.time() - tick_start
+        if tick_elapsed < test["interval"]:
+            time.sleep(test["interval"] - tick_elapsed)
 
+    print(f"\n✅ Test Case #{test['test_id']} completed.\n")
 
 def main():
     for test in TEST_CASES:
         run_test_case(test)
-
 
 if __name__ == "__main__":
     main()
