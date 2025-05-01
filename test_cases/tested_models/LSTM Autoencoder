@@ -1,0 +1,15 @@
+📈 Model Evaluation:
+Precision (Anomalies): 0.012 → ❌ very low
+
+Recall (Anomalies): 0.800 → ✅ high recall
+
+F1-score: 0.023 → ❌ due to many false positives
+
+Overall accuracy: 95% → ✅ but misleading because of imbalance
+
+💡 What This Means:
+High recall = good at catching real anomalies (✅).
+
+Low precision = catches too many normal values as anomalies (❌).
+
+So while it’s very sensitive, it may cause a lot of noise in production unless refined.

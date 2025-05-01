@@ -1,0 +1,11 @@
+🧠 Interpretation:
+High Recall = All 15 anomalies were detected ✅
+
+Very Low Precision = The model incorrectly labeled 187 normal points as anomalies ❌
+
+F1-Score (True) = 0.14 → quite poor
+
+🧩 Conclusion:
+The model is very sensitive — it’s great at finding anomalies (recall = 1.00),
+but not smart at filtering false positives (precision = 0.07).
+Basically: "Shoot everything, hit a few."
