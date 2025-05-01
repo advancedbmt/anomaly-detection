@@ -6,7 +6,7 @@ from datetime import datetime
 
 BENCHMARK_CSV_PATH = os.path.join(os.path.dirname(__file__), "benchmark_metrics.csv")
 
-def benchmark_device(device_type, csv_file, process_fn, dry_run=False):
+def benchmark_device(device_type, csv_file, process_fn, dry_run=False, test_case_id=None):
     """
     Benchmark the time, CPU, memory usage for processing a device.
     
@@ -15,6 +15,7 @@ def benchmark_device(device_type, csv_file, process_fn, dry_run=False):
         csv_file (str): Path to the CSV file.
         process_fn (function): Function that processes the device.
         dry_run (bool): If True, skips processing for speed testing.
+        test_case_id (int): ID of the test case, added to benchmark logs.
     """
     start_time = time.time()
     
@@ -39,6 +40,7 @@ def benchmark_device(device_type, csv_file, process_fn, dry_run=False):
     # Log to CSV
     log_benchmark_metric({
         "timestamp": datetime.now().isoformat(),
+        "test_case_id": test_case_id,  # 🆕 Added test case identifier
         "device_type": device_type,
         "csv_file": csv_file,
         "inference_time_ms": round(inference_time_ms, 2),
@@ -51,7 +53,12 @@ def benchmark_device(device_type, csv_file, process_fn, dry_run=False):
 def log_benchmark_metric(metric_row):
     file_exists = os.path.exists(BENCHMARK_CSV_PATH)
     with open(BENCHMARK_CSV_PATH, mode='a', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=metric_row.keys())
+        fieldnames = [
+            "timestamp", "test_case_id", "device_type", "csv_file",
+            "inference_time_ms", "cpu_percent", "memory_mb",
+            "disk_read_mb", "disk_write_mb"
+        ]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
         writer.writerow(metric_row)

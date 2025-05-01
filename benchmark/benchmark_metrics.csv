@@ -3832,3 +3832,7 @@ timestamp,device_type,inference_time_ms,cpu_percent,memory_mb,disk_read_mb,disk_
 2025-04-30T23:34:52.029023,bale_counter,bale_counter_0_unified.csv,7957.09,4.25,12374.43,0.0,0.0
 2025-04-30T23:34:59.827707,output_sensor,output_sensor_0_unified.csv,7686.86,4.05,12381.13,0.0,0.0
 2025-04-30T23:35:07.923208,output_sensor,output_sensor_0_unified.csv,7989.1,0.9,12430.84,0.0,0.0
+2025-05-01T09:55:06.160360,standalone,bale_counter,bale_counter_0_unified.csv,103.11,0.45,12386.31,0.0,0.0
+2025-05-01T09:55:06.375850,standalone,motor_monitor,motor_monitor_0_unified.csv,103.48,0.45,12388.18,0.0,0.0
+2025-05-01T09:55:06.592648,standalone,output_sensor,output_sensor_0_unified.csv,105.54,1.75,12392.36,0.0,0.0
+2025-05-01T09:55:06.807738,standalone,temperature_sensor,temperature_sensor_0_unified.csv,104.13,1.5,12391.97,0.0,0.0
