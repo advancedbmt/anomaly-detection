@@ -1,4 +1,3 @@
-# benchmark/benchmark_utils.py
 
 import time
 import psutil
@@ -7,11 +6,11 @@ import os
 from datetime import datetime
 
 BENCHMARK_CSV_PATH = os.path.join(os.path.dirname(__file__), "benchmark_metrics.csv")
+process = psutil.Process(os.getpid())  # Track this specific process
 
 def benchmark_device(device_type, csv_file, process_fn, dry_run=False, test_case_id=None):
     """
     Benchmark the time, CPU, memory, disk usage for processing a device.
-
     Parameters:
         device_type (str): Name of the device type.
         csv_file (str): Path to the CSV file.
@@ -21,31 +20,28 @@ def benchmark_device(device_type, csv_file, process_fn, dry_run=False, test_case
     """
     start_time = time.time()
 
-    # Capture memory and CPU before
+    # Capture CPU and memory before inference
     cpu_before = psutil.cpu_percent(interval=None)
-    mem_before = psutil.virtual_memory().used / (1024 * 1024)  # in MB
+    mem_before = process.memory_info().rss / (1024 * 1024)  # Per-process memory in MB
     io_before = psutil.disk_io_counters()
 
-    # Run model processing unless dry run
     if not dry_run:
         process_fn(device_type, csv_file)
 
-    # Capture memory and CPU after
     end_time = time.time()
     cpu_after = psutil.cpu_percent(interval=None)
-    mem_after = psutil.virtual_memory().used / (1024 * 1024)
+    mem_after = process.memory_info().rss / (1024 * 1024)
     io_after = psutil.disk_io_counters()
 
     inference_time_ms = (end_time - start_time) * 1000
     avg_cpu = (cpu_before + cpu_after) / 2
-    mem_used = mem_after
+    mem_used = mem_after  # More accurate per-process RSS memory
 
     disk_read_mb = (io_after.read_bytes - io_before.read_bytes) / (1024 * 1024)
     disk_write_mb = (io_after.write_bytes - io_before.write_bytes) / (1024 * 1024)
 
     print(f"✅ Finished {device_type} | {inference_time_ms:.2f} ms | CPU: {avg_cpu:.1f}% | Mem: {mem_used:.2f} MB")
 
-    # Save to CSV
     log_benchmark_metric({
         "timestamp": datetime.now().isoformat(),
         "test_case_id": test_case_id,
