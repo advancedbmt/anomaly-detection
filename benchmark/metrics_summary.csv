@@ -1,0 +1,6 @@
+metric,mean,median,std,min,max
+inference_time_ms,,,,,
+cpu_percent,,,,,
+memory_mb,,,,,
+disk_read_mb,,,,,
+disk_write_mb,,,,,
