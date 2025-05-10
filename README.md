@@ -40,6 +40,8 @@ conda env create -f test_cases/environment.yml
 ### How To Run
 The `test_cases/multi_device_pipeline_final_updated_with_rf_plot.ipynb` file contains the code for multi-device detection
 
+if in step 6, the random forest cannot be used, run the next block of code to retrain the random forest model. After getting the new random forest model, run the previous block of code to plot anomaly classification results.
+
 The `test_cases/state_lstm_inference_and_rf_classification.ipynb` contains the code for single-device anomaly detection
 
 Run the corresponding Jupyter files in the conda environment for anomaly detection
