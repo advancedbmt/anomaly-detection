@@ -31,9 +31,16 @@ def apply_random_forest(df, device_type):
     return df
 
 def train_rf_for_device(device_name, df):
-    """
-    Train and save Random Forest model using is_anomaly or label column.
-    """
+    model_filename = f"random_forest_{device_name}.pkl"
+    save_path = os.path.join(SAVED_MODELS_PATH, model_filename)
+
+    if os.path.exists(save_path):
+        print(f"✅ RF model already exists at {save_path}, skipping training.")
+        return
+
+    # Drop RF prediction if exists to avoid training on it
+    df = df.drop(columns=[col for col in ['rf_prediction', 'label'] if col in df.columns])
+
     feature_cols = get_numerical_features(df)
     if not feature_cols:
         print(f"⚠️ No features available to train RF for {device_name}.")
@@ -45,8 +52,8 @@ def train_rf_for_device(device_name, df):
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
     rf.fit(X, y)
 
-    model_filename = f"random_forest_{device_name}.pkl"
-    save_path = os.path.join(SAVED_MODELS_PATH, model_filename)
     joblib.dump(rf, save_path)
-
     print(f"✅ RF model saved at {save_path} for {device_name}")
+
+
+
