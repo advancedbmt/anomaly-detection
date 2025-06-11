@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  anomaly-detection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anomaly-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+    command: >
+      jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
+      --allow-root --NotebookApp.token='' --NotebookApp.password=''
