@@ -41,6 +41,7 @@ def get_device_files():
                 continue
             device_files.append((device_type, file))
     return device_files
+
 def get_numerical_features(df):
     exclude = EXCLUDE_COLUMNS + ['label', 'rf_prediction', 'is_anomaly']
     return [col for col in df.columns if col not in exclude and pd.api.types.is_numeric_dtype(df[col])]
