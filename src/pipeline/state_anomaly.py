@@ -61,15 +61,28 @@ def detect_state_anomalies(df_state, model_path, feature_cols):
     print(f"DEBUG: After thresholding, anomaly_flags unique values: {np.unique(anomaly_flags)}")
     print(f"DEBUG: After thresholding, count of True flags: {np.sum(anomaly_flags)}")
 
-    # ✅ CRITICAL FIX: THIS LINE MUST BE COMMENTED OUT FOR DIAGNOSIS!
-    # anomaly_flags = enforce_min_anomaly_duration(anomaly_flags)
+    # anomaly_flags = enforce_min_anomaly_duration(anomaly_flags) # This must remain commented out for now.
 
     flags = np.array([False] * len(df_state))
     flags[SEQUENCE_LENGTH:len(errors) + SEQUENCE_LENGTH] = anomaly_flags
-    print(f"DEBUG: Final flags assigned to df_state, unique values: {np.unique(flags)}")
-    print(f"DEBUG: Final flags assigned to df_state, count of True flags: {np.sum(flags)}")
 
     df_state['reconstruction_error'] = [0.0] * SEQUENCE_LENGTH + errors.tolist()
     df_state['is_anomaly'] = flags
+
+    # ✅ NEW: Calculate error percentile for each error score
+    # Normalize error for percentile calculation by using all non-zero errors.
+    # We use a large number of bins for better resolution
+    if len(errors) > 0 and np.max(errors) > 0:
+        # Calculate percentiles relative to the distribution of errors for this state
+        error_percentiles = np.array([
+            pd.Series(errors).rank(pct=True)[i] * 100
+            for i in range(len(errors))
+        ])
+    else:
+        error_percentiles = np.zeros(len(errors))
+
+    # Pad with zeros for the initial SEQUENCE_LENGTH
+    padded_percentiles = [0.0] * SEQUENCE_LENGTH + error_percentiles.tolist()
+    df_state['error_percentile'] = padded_percentiles[:len(df_state)] # Ensure length matches df_state
 
     return df_state
