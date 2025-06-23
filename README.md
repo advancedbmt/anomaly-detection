@@ -1,66 +1,79 @@
-# Anomaly Detection
+## Setup & Prerequisites
 
-The Anomaly Detection algorithm for detecting abnormal data in the batch data
+1.  **Project Structure:** Ensure that common project data and model directories (`data/`, `devices_data/`, `storage/saved_models/`) are accessible at the **top level** of your project (the parent directory containing `AnomalyDetection/`). This is necessary for path resolution.
+2.  **Python Environment:**
+    * It's highly recommended to use a virtual environment (e.g., `conda` or `venv`).
+    * Install necessary libraries. You will need: `pandas`, `numpy`, `tensorflow` (for Keras `load_model`), `scikit-learn` (for `MinMaxScaler`), `matplotlib`, `psutil`.
 
-## Getting Started
+    ```bash
+    # Example using conda:
+    conda create -n anomaly_env python=3.9
+    conda activate anomaly_env
+    pip install pandas numpy tensorflow scikit-learn matplotlib psutil
+    ```
+3.  **Trained LSTM Models:** This pipeline expects pre-trained LSTM models (`.h5` files) to be present in the `storage/saved_models/` directory at the project's top level.
+4.  **Raw Data:** Your raw sensor data files (`_unified.csv` files) must be located in the `devices_data/` directory at the project's top level.
 
-The following software should be installed prior to spinning up the development environment
+## Configuration
 
-  * [Git](https://git-scm.com/downloads)
-  * [Visual Studio Code](https://code.visualstudio.com/download)
-  * [Anaconda](https://www.anaconda.com/)
+The `config.py` file within `AnomalyDetection/src/pipeline/` is central to configuring this pipeline:
 
-
+* **`ROOT_DIR`**: **(Calculated automatically)**. This crucial variable determines the base path for locating data and model directories (like `devices_data/`, `storage/`, `data/`) that are external to this specific `AnomalyDetection/` repository but are at the project's top level.
+* **`DEVICES_DATA_PATH`**: Specifies the location of your raw input CSV data.
+* **`SAVED_MODELS_PATH`**: Specifies the directory where your trained LSTM models (`.h5` files) are stored.
+* **`ANOMALY_PERCENTILE`**: (Default: `90`). Controls the sensitivity of LSTM anomaly detection. Lowering this value (e.g., to `85` or `80`) will result in more data points being flagged as `is_anomaly=True`.
+* `MIN_ANOMALY_DURATION`: (Default: `3`). This parameter dictates the minimum number of consecutive anomalous timestamps required for an anomaly to be flagged. **For current diagnostic purposes, the *call* to `enforce_min_anomaly_duration` within `state_anomaly.py` is commented out.** If you wish to re-enable duration filtering, you will need to uncomment that line in `state_anomaly.py`.
+* `ERROR_SMOOTHING_SPAN`: Smoothing window for the Exponentially Weighted Moving Average (EWMA) applied to reconstruction errors.
+* `EXCLUDE_COLUMNS`: List of data columns that need to be excluded from feature sets during anomaly detection processing.
 
 ## Usage
 
-For Conda envionment setup, please use the environment.yml file. The environment.yml file contains the required packages for the project.
-The code for setting up the conda environment is as follows:
+To run the Anomaly Detection pipeline and generate the updated `anomalies_output.json` file:
 
+1.  **Activate your Python environment:**
 
-```
-conda env create -f test_cases/environment.yml
-```
+    ```bash
+    conda activate anomaly_env
+    ```
 
-### Folder Overview
-* `json_folder` contains the config files for different devices.
-  - device_config*.json are the config files containing basic device info
-  - The synthetic_config.json file contains the config for generating synthetic data. It includes the following:
-    - Each device type's state schedule
-    - the range for each sensor's synthetic data generation rules
-    - All names appearing in the designated device_config file should also appear in synthetic_config.json
+2.  **Navigate to the pipeline directory:**
 
-  - The pipeline_config.json file is for integration purposes. However, it is not used in the current version of the code.
+    ```bash
+    cd C:\Users\Thomas\Desktop\root-folder\AnomalyDetection\src\pipeline
+    ```
 
-* `src` contains the original data used by anomaly detection
-* `test_cases` contains the modelized anomaly detection for benchmarking
-* `benchmark` contains the files for the anomaly detection benchmark test
-* `test_csv` contains reshaped data for anomaly detection
+3.  **Execute the main script:**
 
-### How To Run
-The `test_cases/multi_device_pipeline_final_updated_with_rf_plot.ipynb` file contains the code for multi-device detection
+    ```bash
+    python main.ipynb  # Or 'python main.py' if converted
+    ```
 
-if in step 6, the random forest cannot be used, run the next block of code to retrain the random forest model. After getting the new random forest model, run the previous block of code to plot anomaly classification results.
+    *(Note: Older notebooks like `test_cases/multi_device_pipeline_final_updated_with_rf_plot.ipynb` contain previous versions of the multi-device detection logic. `main.ipynb` in `src/pipeline` is the current primary entry point for the core AD pipeline.)*
 
-The `test_cases/state_lstm_inference_and_rf_classification.ipynb` contains the code for single-device anomaly detection
+The script will process data for each device, display debug information (including `is_anomaly` counts and `error_percentile` distribution), plot reconstruction errors, and finally export all processed results to `data/anomalies_output.json` (located at the project's top level).
 
-Run the corresponding Jupyter files in the conda environment for anomaly detection
+## Outputs
 
-The default configuration is as follows
-```
-DEVICES_DATA_PATH = "../src/devices_data/"
-SAVED_MODELS_PATH = "../test_cases/saved_models/"
-EXCLUDE_COLUMNS = ['timestamp', 'state', 'reconstruction_error', 'is_anomaly', 'label']
-SEQUENCE_LENGTH = 30
-ANOMALY_PERCENTILE = 99.5
-MIN_ANOMALY_DURATION = 3
-ERROR_SMOOTHING_SPAN = 5
-```
+* **`data/anomalies_output.json`**: This is the primary output. It's a structured JSON file containing records for all processed timestamps for each device, including:
+    * `device`: Name of the device.
+    * `timestamp`: Time of the record.
+    * `error`: LSTM reconstruction error.
+    * `state`: Device operating state.
+    * `is_anomaly`: Boolean flag (True if LSTM detects an anomaly).
+    * `error_percentile`: Percentile rank of the error (0-100%).
+    * `features`: Dictionary of raw sensor feature values.
+* **Reconstruction Error Plots**: Static plots visualizing the `reconstruction_error` for each device's states, highlighting the percentile threshold and detected `is_anomaly` points.
 
-- `DEVICES_DATA_PATH` should be the device config file
-- `SAVED_MODELS_PATH` is the folder storing all trained models
-- `EXCLUDE_COLUMNS ` data columns need to be excluded for anomaly detection
-- `SEQUENCE_LENGTH ` reconstruction window length for LSTM decoder
-- `ANOMALY_PERCENTILE ` percentile for anomaly classification
-- `MIN_ANOMALY_DURATION ` minimum length for anomaly to be considered as a true anomaly
-- `ERROR_SMOOTHING_SPAN ` smoothing window for anomaly detection threshold 
+## Collaboration with Incident Classification
+
+The `anomalies_output.json` generated by this repository is designed to be consumed by the `Incident Classification` repository for further analysis, rule-based incident type classification, and detailed dual-axis plotting. Ensure this pipeline is run successfully to generate the latest JSON data before running the Incident Classification module.
+
+## Troubleshooting
+
+* **`File not found` or `Model not found` errors:** Double-check `ROOT_DIR`, `DEVICES_DATA_PATH`, `SAVED_MODELS_PATH` in `config.py` to ensure they correctly point to your project's top-level `root-folder` and its subdirectories.
+* **No `is_anomaly` (or all `False`s) in `anomalies_output.json`:**
+    * Lower `ANOMALY_PERCENTILE` in `config.py` (e.g., to `85` or `80`).
+    * Ensure the *call* to `enforce_min_anomaly_duration` is commented out in `state_anomaly.py`.
+* **Plotting issues (e.g., blank plots):** Verify that the data (`timestamp`, `reconstruction_error`, `is_anomaly`) is present in the DataFrame being passed to `plot_reconstruction_error`. For issues with the final classification plots, refer to the `Incident Classification` repository's `README.md`.
+
+---
