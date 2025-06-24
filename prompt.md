@@ -28,7 +28,7 @@ Generate Python code for anomaly detection pipelines that process time-series da
 - Compose file must define a service that:
   - Mounts `src/`, `data/`, `models/`
   - Exposes port 5000 for future expansion (optional)
-  - Runs `multi_device_pipeline.py` as entrypoint
+  - Runs `main.ipynb` as entrypoint via Jupyter Notebook
 
 ---
 
