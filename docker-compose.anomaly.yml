@@ -1,23 +1,23 @@
 services:
   anomaly-detection:
     build:
-      context: ./anomaly-detection
+      context: ../anomaly-detection
       dockerfile: Dockerfile
     container_name: anomaly-notebook
     volumes:
-      - ./anomaly-detection:/app
+      - ../anomaly-detection:/app
     working_dir: /app
     environment:
       - MQTT_HOST=hivemq
       - MQTT_PORT=1883
     ports:
-      - "8888:8888"
+      - "8891:8888"
     command: >
       jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser
       --allow-root --NotebookApp.token='' --NotebookApp.password=''
-    networks:
-      - scada-net
+#     networks:
+#       - scada-net
 
-networks:
-  scada-net:
-    external: true
+# networks:
+#   scada-net:
+#     external: true

@@ -18,3 +18,11 @@ EXCLUDE_COLUMNS = ['timestamp', 'state', 'reconstruction_error', 'is_anomaly', '
 process = psutil.Process(os.getpid())
 start_memory = process.memory_info().rss / (1024 * 1024)
 global_start_time = time.time()
+
+
+# === Postgres config ===
+DB_NAME = "db"
+DB_USER = "user"
+DB_PASSWORD = "password"
+DB_HOST = "db"  # Docker service name
+DB_PORT = "5432"
