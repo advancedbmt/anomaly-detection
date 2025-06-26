@@ -1,5 +1,6 @@
 from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 import psycopg2
+from psycopg2.extras import execute_values
 import pandas as pd
 
 def get_postgres_connection():
@@ -111,6 +112,19 @@ def get_all_motor_names(conn):
         if match:
             motor_names.add(match.group(0))
     return sorted(motor_names)
+
+
+def save_anomaly_results(conn, df, table_name="anomaly_results"):
+    """Insert rows from `df` into `table_name` using the existing connection."""
+    cols = list(df.columns)
+    values = [tuple(x) for x in df.to_numpy()]
+    with conn.cursor() as cur:
+        execute_values(
+            cur,
+            f"INSERT INTO {table_name} ({','.join(cols)}) VALUES %s",
+            values
+        )
+    conn.commit()
 
 
 
