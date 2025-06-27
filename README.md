@@ -1,79 +1,81 @@
-## Setup & Prerequisites
+# Anomaly Detection Pipeline
 
-1.  **Project Structure:** Ensure that common project data and model directories (`data/`, `devices_data/`, `storage/saved_models/`) are accessible at the **top level** of your project (the parent directory containing `AnomalyDetection/`). This is necessary for path resolution.
-2.  **Python Environment:**
-    * It's highly recommended to use a virtual environment (e.g., `conda` or `venv`).
-    * Install necessary libraries. You will need: `pandas`, `numpy`, `tensorflow` (for Keras `load_model`), `scikit-learn` (for `MinMaxScaler`), `matplotlib`, `psutil`.
+This project implements a time–series anomaly detection workflow built with LSTM Autoencoders. It processes sensor data from CSV files or a PostgreSQL database and exports the results to a structured JSON file. A Docker environment is provided for a reproducible setup.
 
-    ```bash
-    # Example using conda:
-    conda create -n anomaly_env python=3.9
-    conda activate anomaly_env
-    pip install pandas numpy tensorflow scikit-learn matplotlib psutil
-    ```
-3.  **Trained LSTM Models:** This pipeline expects pre-trained LSTM models (`.h5` files) to be present in the `storage/saved_models/` directory at the project's top level.
-4.  **Raw Data:** Your raw sensor data files (`_unified.csv` files) must be located in the `devices_data/` directory at the project's top level.
+## Project Structure
 
-## Configuration
+The repository assumes a set of directories located at the project root:
 
-The `config.py` file within `AnomalyDetection/src/pipeline/` is central to configuring this pipeline:
+- `data/` &ndash; output location for generated files such as `anomalies_output.json`
+- `src/devices_data/` &ndash; raw sensor CSV files (`*_unified.csv`)
+- `storage/saved_models/` &ndash; directory containing pre-trained LSTM model files (`.h5`)
 
-* **`ROOT_DIR`**: **(Calculated automatically)**. This crucial variable determines the base path for locating data and model directories (like `devices_data/`, `storage/`, `data/`) that are external to this specific `AnomalyDetection/` repository but are at the project's top level.
-* **`DEVICES_DATA_PATH`**: Specifies the location of your raw input CSV data.
-* **`SAVED_MODELS_PATH`**: Specifies the directory where your trained LSTM models (`.h5` files) are stored.
-* **`ANOMALY_PERCENTILE`**: (Default: `90`). Controls the sensitivity of LSTM anomaly detection. Lowering this value (e.g., to `85` or `80`) will result in more data points being flagged as `is_anomaly=True`.
-* `MIN_ANOMALY_DURATION`: (Default: `3`). This parameter dictates the minimum number of consecutive anomalous timestamps required for an anomaly to be flagged. **For current diagnostic purposes, the *call* to `enforce_min_anomaly_duration` within `state_anomaly.py` is commented out.** If you wish to re-enable duration filtering, you will need to uncomment that line in `state_anomaly.py`.
-* `ERROR_SMOOTHING_SPAN`: Smoothing window for the Exponentially Weighted Moving Average (EWMA) applied to reconstruction errors.
-* `EXCLUDE_COLUMNS`: List of data columns that need to be excluded from feature sets during anomaly detection processing.
+If these folders live outside of the repository, ensure they are mounted or linked so the code can locate them.
 
-## Usage
+## Environment
 
-To run the Anomaly Detection pipeline and generate the updated `anomalies_output.json` file:
+The recommended way to run the pipeline is inside Docker. A `Dockerfile` and `docker-compose.anomaly.yml` are included.
 
-1.  **Activate your Python environment:**
+```bash
+docker compose -f docker-compose.anomaly.yml up --build
+```
 
-    ```bash
-    conda activate anomaly_env
-    ```
+This launches a container running Jupyter Notebook on port `8891` with all Python dependencies installed.
 
-2.  **Navigate to the pipeline directory:**
+For local development without Docker, create a Python 3.10+ environment and install dependencies from `requirements.txt` or `environment.yml`:
 
-    ```bash
-    cd C:\Users\Thomas\Desktop\root-folder\AnomalyDetection\src\pipeline
-    ```
+```bash
+# Using conda
+env_name=anomaly_env
+conda create -n $env_name python=3.12
+conda activate $env_name
+pip install -r requirements.txt
+```
 
-3.  **Execute the main script:**
+The main libraries used are:
 
-    ```bash
-    python main.ipynb  # Or 'python main.py' if converted
-    ```
+- `pandas`, `numpy`, `scikit-learn`
+- `tensorflow` and `keras`
+- `matplotlib`, `seaborn`
+- `psycopg2-binary` for PostgreSQL access
+- `paho-mqtt`, `psutil`, and other utilities
 
-    *(Note: Older notebooks like `test_cases/multi_device_pipeline_final_updated_with_rf_plot.ipynb` contain previous versions of the multi-device detection logic. `main.ipynb` in `src/pipeline` is the current primary entry point for the core AD pipeline.)*
+## Database Configuration
 
-The script will process data for each device, display debug information (including `is_anomaly` counts and `error_percentile` distribution), plot reconstruction errors, and finally export all processed results to `data/anomalies_output.json` (located at the project's top level).
+The pipeline now requires access to a PostgreSQL database to load historical sensor values. Connection parameters are defined in `src/pipeline/config.py`:
 
-## Outputs
+```python
+DB_NAME = "db"
+DB_USER = "user"
+DB_PASSWORD = "password"
+DB_HOST = "db"  # Docker service name
+DB_PORT = "5432"
+```
 
-* **`data/anomalies_output.json`**: This is the primary output. It's a structured JSON file containing records for all processed timestamps for each device, including:
-    * `device`: Name of the device.
-    * `timestamp`: Time of the record.
-    * `error`: LSTM reconstruction error.
-    * `state`: Device operating state.
-    * `is_anomaly`: Boolean flag (True if LSTM detects an anomaly).
-    * `error_percentile`: Percentile rank of the error (0-100%).
-    * `features`: Dictionary of raw sensor feature values.
-* **Reconstruction Error Plots**: Static plots visualizing the `reconstruction_error` for each device's states, highlighting the percentile threshold and detected `is_anomaly` points.
+These can be adjusted through environment variables or by editing `config.py`. Ensure the database is running and reachable from the Docker container (the compose file expects a service named `db`).
 
-## Collaboration with Incident Classification
+## Running the Pipeline
 
-The `anomalies_output.json` generated by this repository is designed to be consumed by the `Incident Classification` repository for further analysis, rule-based incident type classification, and detailed dual-axis plotting. Ensure this pipeline is run successfully to generate the latest JSON data before running the Incident Classification module.
+1. Start the Docker environment or activate your Python environment.
+2. Open Jupyter Notebook (automatically started inside Docker) and navigate to `src/pipeline/main.ipynb`. **This notebook handles all database communication.**
+3. Execute the notebook cells or convert it to a Python script and run:
+
+   ```bash
+   python src/pipeline/main.py
+   ```
+
+   Note that `main.py` does not connect to PostgreSQL. It expects CSV data only.
+
+The script loads data, performs anomaly detection per device, plots reconstruction errors, and writes results to `data/anomalies_output.json`.
+
+## Output
+
+`anomalies_output.json` contains a record for each timestamp with keys such as `device`, `timestamp`, `error`, `state`, `is_anomaly`, and `error_percentile`. Plots illustrating reconstruction error vs. the anomaly threshold are also generated for each device.
 
 ## Troubleshooting
 
-* **`File not found` or `Model not found` errors:** Double-check `ROOT_DIR`, `DEVICES_DATA_PATH`, `SAVED_MODELS_PATH` in `config.py` to ensure they correctly point to your project's top-level `root-folder` and its subdirectories.
-* **No `is_anomaly` (or all `False`s) in `anomalies_output.json`:**
-    * Lower `ANOMALY_PERCENTILE` in `config.py` (e.g., to `85` or `80`).
-    * Ensure the *call* to `enforce_min_anomaly_duration` is commented out in `state_anomaly.py`.
-* **Plotting issues (e.g., blank plots):** Verify that the data (`timestamp`, `reconstruction_error`, `is_anomaly`) is present in the DataFrame being passed to `plot_reconstruction_error`. For issues with the final classification plots, refer to the `Incident Classification` repository's `README.md`.
+- **File or model not found** &ndash; verify the directory paths in `config.py`.
+- **No anomalies detected** &ndash; lower `ANOMALY_PERCENTILE` or review model training.
+- **Plotting issues** &ndash; ensure the DataFrame passed to `plot_reconstruction_error` has the required columns.
 
 ---
