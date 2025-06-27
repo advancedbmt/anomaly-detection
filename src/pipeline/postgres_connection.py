@@ -114,6 +114,7 @@ def get_all_motor_names(conn):
 
 
 
+
 if __name__ == "__main__":
     conn = get_postgres_connection()
     if conn:
