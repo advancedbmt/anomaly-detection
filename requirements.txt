@@ -1,0 +1,13 @@
+pandas
+numpy
+scikit-learn
+tensorflow
+matplotlib
+joblib
+psutil
+jupyterlab
+notebook
+seaborn
+pyod
+psycopg2-binary
+paho-mqtt

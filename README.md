@@ -1,66 +1,81 @@
-# Anomaly Detection
+# Anomaly Detection Pipeline
 
-The Anomaly Detection algorithm for detecting abnormal data in the batch data
+This project implements a time–series anomaly detection workflow built with LSTM Autoencoders. It processes sensor data from CSV files or a PostgreSQL database and exports the results to a structured JSON file. A Docker environment is provided for a reproducible setup.
 
-## Getting Started
+## Project Structure
 
-The following software should be installed prior to spinning up the development environment
+The repository assumes a set of directories located at the project root:
 
-  * [Git](https://git-scm.com/downloads)
-  * [Visual Studio Code](https://code.visualstudio.com/download)
-  * [Anaconda](https://www.anaconda.com/)
+- `data/` &ndash; output location for generated files such as `anomalies_output.json`
+- `src/devices_data/` &ndash; raw sensor CSV files (`*_unified.csv`)
+- `storage/saved_models/` &ndash; directory containing pre-trained LSTM model files (`.h5`)
 
+If these folders live outside of the repository, ensure they are mounted or linked so the code can locate them.
 
+## Environment
 
-## Usage
+The recommended way to run the pipeline is inside Docker. A `Dockerfile` and `docker-compose.anomaly.yml` are included.
 
-For Conda envionment setup, please use the environment.yml file. The environment.yml file contains the required packages for the project.
-The code for setting up the conda environment is as follows:
-
-
-```
-conda env create -f test_cases/environment.yml
+```bash
+docker compose -f docker-compose.anomaly.yml up --build
 ```
 
-### Folder Overview
-* `json_folder` contains the config files for different devices.
-  - device_config*.json are the config files containing basic device info
-  - The synthetic_config.json file contains the config for generating synthetic data. It includes the following:
-    - Each device type's state schedule
-    - the range for each sensor's synthetic data generation rules
-    - All names appearing in the designated device_config file should also appear in synthetic_config.json
+This launches a container running Jupyter Notebook on port `8891` with all Python dependencies installed.
 
-  - The pipeline_config.json file is for integration purposes. However, it is not used in the current version of the code.
+For local development without Docker, create a Python 3.10+ environment and install dependencies from `requirements.txt` or `environment.yml`:
 
-* `src` contains the original data used by anomaly detection
-* `test_cases` contains the modelized anomaly detection for benchmarking
-* `benchmark` contains the files for the anomaly detection benchmark test
-* `test_csv` contains reshaped data for anomaly detection
-
-### How To Run
-The `test_cases/multi_device_pipeline_final_updated_with_rf_plot.ipynb` file contains the code for multi-device detection
-
-if in step 6, the random forest cannot be used, run the next block of code to retrain the random forest model. After getting the new random forest model, run the previous block of code to plot anomaly classification results.
-
-The `test_cases/state_lstm_inference_and_rf_classification.ipynb` contains the code for single-device anomaly detection
-
-Run the corresponding Jupyter files in the conda environment for anomaly detection
-
-The default configuration is as follows
-```
-DEVICES_DATA_PATH = "../src/devices_data/"
-SAVED_MODELS_PATH = "../test_cases/saved_models/"
-EXCLUDE_COLUMNS = ['timestamp', 'state', 'reconstruction_error', 'is_anomaly', 'label']
-SEQUENCE_LENGTH = 30
-ANOMALY_PERCENTILE = 99.5
-MIN_ANOMALY_DURATION = 3
-ERROR_SMOOTHING_SPAN = 5
+```bash
+# Using conda
+env_name=anomaly_env
+conda create -n $env_name python=3.12
+conda activate $env_name
+pip install -r requirements.txt
 ```
 
-- `DEVICES_DATA_PATH` should be the device config file
-- `SAVED_MODELS_PATH` is the folder storing all trained models
-- `EXCLUDE_COLUMNS ` data columns need to be excluded for anomaly detection
-- `SEQUENCE_LENGTH ` reconstruction window length for LSTM decoder
-- `ANOMALY_PERCENTILE ` percentile for anomaly classification
-- `MIN_ANOMALY_DURATION ` minimum length for anomaly to be considered as a true anomaly
-- `ERROR_SMOOTHING_SPAN ` smoothing window for anomaly detection threshold 
+The main libraries used are:
+
+- `pandas`, `numpy`, `scikit-learn`
+- `tensorflow` and `keras`
+- `matplotlib`, `seaborn`
+- `psycopg2-binary` for PostgreSQL access
+- `paho-mqtt`, `psutil`, and other utilities
+
+## Database Configuration
+
+The pipeline now requires access to a PostgreSQL database to load historical sensor values. Connection parameters are defined in `src/pipeline/config.py`:
+
+```python
+DB_NAME = "db"
+DB_USER = "user"
+DB_PASSWORD = "password"
+DB_HOST = "db"  # Docker service name
+DB_PORT = "5432"
+```
+
+These can be adjusted through environment variables or by editing `config.py`. Ensure the database is running and reachable from the Docker container (the compose file expects a service named `db`).
+
+## Running the Pipeline
+
+1. Start the Docker environment or activate your Python environment.
+2. Open Jupyter Notebook (automatically started inside Docker) and navigate to `src/pipeline/main.ipynb`. **This notebook handles all database communication.**
+3. Execute the notebook cells or convert it to a Python script and run:
+
+   ```bash
+   python src/pipeline/main.py
+   ```
+
+   Note that `main.py` does not connect to PostgreSQL. It expects CSV data only.
+
+The script loads data, performs anomaly detection per device, plots reconstruction errors, and writes results to `data/anomalies_output.json`.
+
+## Output
+
+`anomalies_output.json` contains a record for each timestamp with keys such as `device`, `timestamp`, `error`, `state`, `is_anomaly`, and `error_percentile`. Plots illustrating reconstruction error vs. the anomaly threshold are also generated for each device.
+
+## Troubleshooting
+
+- **File or model not found** &ndash; verify the directory paths in `config.py`.
+- **No anomalies detected** &ndash; lower `ANOMALY_PERCENTILE` or review model training.
+- **Plotting issues** &ndash; ensure the DataFrame passed to `plot_reconstruction_error` has the required columns.
+
+---
