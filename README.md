@@ -20,16 +20,17 @@ An extensible framework for identifying anomalies in time-series sensor data usi
 The pipeline requires **Python 3.10+**. You can install dependencies with pip or conda, or run everything in Docker.
 
 ```bash
-# clone the repository
+# Clone the repository
 git clone https://github.com/yourorg/anomaly-detection.git
 cd anomaly-detection
 
-# optional: create a virtual environment
-python -m venv venv
-source venv/bin/activate
+# Create and activate a new conda environment
+conda create -n anomaly_env python=3.10 -y
+conda activate anomaly_env
 
-# install requirements
+# Install dependencies
 pip install -r requirements.txt
+
 ```
 
 Conda users may create an environment with the provided `environment.yml`:
