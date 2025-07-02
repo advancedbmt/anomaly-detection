@@ -1,6 +1,6 @@
 # Anomaly Detection Pipeline
 
-An extensible framework for identifying anomalies in time-series sensor data using LSTM autoencoders. The project includes a FastAPI service for real-time predictions, a Jupyter workflow for exploration, and Docker recipes for a reproducible setup.
+An extensible framework for identifying anomalies in time-series sensor data using LSTM autoencoders. The project includes a FastAPI service for real-time predictions and Docker recipes for a reproducible setup.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -39,27 +39,17 @@ conda env create -f environment.yml
 conda activate python3.12
 ```
 
-To start a completely reproducible stack, build and run the Docker compose setup:
+To start a completely reproducible stack, build and run the Docker setup:
 
 ```bash
-docker compose -f docker-compose.anomaly.yml up --build
+docker build -t anomaly-api .
+docker run -d --name anomaly-api --network scada-screens_default -p 8002:8000 anomaly-api
 ```
 
 This exposes the FastAPI service on **localhost:8002** and mounts the project source code inside the container.
 
 ## Usage
 
-Run the Jupyter notebook for exploratory work:
-
-```bash
-jupyter notebook src/pipeline/main.ipynb
-```
-
-Or execute the pipeline as a script:
-
-```bash
-python src/pipeline/main.py
-```
 
 The FastAPI service can be launched manually from `src/pipeline`:
 
@@ -121,4 +111,4 @@ Built with help from **LLM Agents** and numerous open‑source libraries includi
 - **File or model not found** – verify the paths in `config.py`.
 - **No anomalies detected** – lower `ANOMALY_PERCENTILE` or retrain your models.
 - **Plotting issues** – ensure the DataFrame passed to plotting functions contains the required columns.
-
+- **Docker can't connect to database** – ensure the `scada-screens` service (or the PostgreSQL container) is running before launching the anomaly pipeline.
