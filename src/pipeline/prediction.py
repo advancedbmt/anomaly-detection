@@ -20,7 +20,6 @@ def process_device_query(device_type: str, df_raw: pd.DataFrame) -> pd.DataFrame
 
     device_start_time = pd.Timestamp.now()
     df_all = pd.DataFrame()
-    print(csv_file, device_type)  # ← only if `csv_file` is defined globally
 
     try:
         df = df_raw.copy()

@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Query
 import paho.mqtt.client as mqtt
 import json
 import postgres_connection as pg_conn
-from processing.prediction import process_device_query  # your updated logic
+from prediction import process_device_query  # your updated logic
 
 app = FastAPI(title="Anomaly Prediction API")
 

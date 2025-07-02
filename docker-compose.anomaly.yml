@@ -6,7 +6,7 @@ services:
     container_name: anomaly-api
     volumes:
       - ../anomaly-detection:/app
-    working_dir: /app
+    working_dir: /app/src/pipeline
     environment:
       - MQTT_HOST=hivemq
       - MQTT_PORT=1883
