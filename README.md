@@ -1,48 +1,51 @@
 # Anomaly Detection Pipeline
 
-This project implements a time–series anomaly detection workflow built with LSTM Autoencoders. It processes sensor data from CSV files or a PostgreSQL database and exports the results to a structured JSON file. A Docker environment is provided for a reproducible setup.
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-## Project Structure
+A lightweight time–series anomaly detection system using LSTM autoencoders. It processes sensor CSVs or PostgreSQL data and exports JSON results.
 
-The repository assumes a set of directories located at the project root:
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+- [FAQ](#faq)
 
-- `data/` &ndash; output location for generated files such as `anomalies_output.json`
-- `src/devices_data/` &ndash; raw sensor CSV files (`*_unified.csv`)
-- `storage/saved_models/` &ndash; directory containing pre-trained LSTM model files (`.h5`)
+## Installation
 
-If these folders live outside of the repository, ensure they are mounted or linked so the code can locate them.
+Python 3.10+ is required. Clone the repository and install dependencies with `pip` or `conda`. Docker files are provided for a fully reproducible setup.
 
-## Environment
+```bash
+# optional: create a virtual environment
+python -m venv .venv && source .venv/bin/activate
 
-The recommended way to run the pipeline is inside Docker. A `Dockerfile` and `docker-compose.anomaly.yml` are included.
+# install
+pip install -r requirements.txt
+```
+
+Or start everything in Docker:
 
 ```bash
 docker compose -f docker-compose.anomaly.yml up --build
 ```
 
-This launches a container running Jupyter Notebook on port `8891` with all Python dependencies installed.
+## Usage
 
-For local development without Docker, create a Python 3.10+ environment and install dependencies from `requirements.txt` or `environment.yml`:
+Start Jupyter inside Docker or your local environment and run `src/pipeline/main.ipynb`. To run as a script:
 
 ```bash
-# Using conda
-env_name=anomaly_env
-conda create -n $env_name python=3.12
-conda activate $env_name
-pip install -r requirements.txt
+python src/pipeline/main.py
 ```
 
-The main libraries used are:
+The script loads data, performs anomaly detection, and writes `data/anomalies_output.json`.
 
-- `pandas`, `numpy`, `scikit-learn`
-- `tensorflow` and `keras`
-- `matplotlib`, `seaborn`
-- `psycopg2-binary` for PostgreSQL access
-- `paho-mqtt`, `psutil`, and other utilities
+## Configuration
 
-## Database Configuration
-
-The pipeline now requires access to a PostgreSQL database to load historical sensor values. Connection parameters are defined in `src/pipeline/config.py`:
+Database settings live in [`src/pipeline/config.py`](src/pipeline/config.py):
 
 ```python
 DB_NAME = "db"
@@ -52,30 +55,42 @@ DB_HOST = "db"  # Docker service name
 DB_PORT = "5432"
 ```
 
-These can be adjusted through environment variables or by editing `config.py`. Ensure the database is running and reachable from the Docker container (the compose file expects a service named `db`).
+Modify these values or set environment variables so the pipeline can connect to your PostgreSQL instance. Paths for input CSVs and saved models are also defined in this file.
 
-## Running the Pipeline
+## Development
 
-1. Start the Docker environment or activate your Python environment.
-2. Open Jupyter Notebook (automatically started inside Docker) and navigate to `src/pipeline/main.ipynb`. **This notebook handles all database communication.**
-3. Execute the notebook cells or convert it to a Python script and run:
+Use `python -m venv` or `conda` to create an environment. We recommend running `flake8` and `black` before submitting pull requests. Unit tests (under `benchmark/`) can be executed with `pytest`.
 
-   ```bash
-   python src/pipeline/main.py
-   ```
+```bash
+pytest
+```
 
-   Note that `main.py` does not connect to PostgreSQL. It expects CSV data only.
+## Project Structure
 
-The script loads data, performs anomaly detection per device, plots reconstruction errors, and writes results to `data/anomalies_output.json`.
+```
+archive/                Previous notebooks and scripts
+benchmark/              Benchmark utilities and tests
+json_folder/            Example configuration JSON files
+src/                    Core pipeline code
+storage/saved_models/   Pre-trained LSTM models
+```
 
-## Output
+See the repository for additional data and example CSVs.
 
-`anomalies_output.json` contains a record for each timestamp with keys such as `device`, `timestamp`, `error`, `state`, `is_anomaly`, and `error_percentile`. Plots illustrating reconstruction error vs. the anomaly threshold are also generated for each device.
+## Contributing
 
-## Troubleshooting
+Issues and pull requests are welcome! Please follow standard [PEP 8](https://peps.python.org/pep-0008/) style and run linters before submitting. Opening an issue to discuss new features is encouraged.
 
-- **File or model not found** &ndash; verify the directory paths in `config.py`.
-- **No anomalies detected** &ndash; lower `ANOMALY_PERCENTILE` or review model training.
-- **Plotting issues** &ndash; ensure the DataFrame passed to `plot_reconstruction_error` has the required columns.
+## License
 
----
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Credits
+
+Built with help from LLM Agents and the open-source community.
+
+## FAQ
+
+- **File or model not found** – check paths in `config.py`.
+- **No anomalies detected** – lower `ANOMALY_PERCENTILE` or retrain models.
+- **Plotting issues** – ensure the DataFrame has the required columns.
