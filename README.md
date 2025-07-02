@@ -1,81 +1,124 @@
 # Anomaly Detection Pipeline
 
-This project implements a time–series anomaly detection workflow built with LSTM Autoencoders. It processes sensor data from CSV files or a PostgreSQL database and exports the results to a structured JSON file. A Docker environment is provided for a reproducible setup.
+An extensible framework for identifying anomalies in time-series sensor data using LSTM autoencoders. The project includes a FastAPI service for real-time predictions, a Jupyter workflow for exploration, and Docker recipes for a reproducible setup.
 
-## Project Structure
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-The repository assumes a set of directories located at the project root:
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+- [FAQ](#faq)
 
-- `data/` &ndash; output location for generated files such as `anomalies_output.json`
-- `src/devices_data/` &ndash; raw sensor CSV files (`*_unified.csv`)
-- `storage/saved_models/` &ndash; directory containing pre-trained LSTM model files (`.h5`)
+## Installation
 
-If these folders live outside of the repository, ensure they are mounted or linked so the code can locate them.
+The pipeline requires **Python 3.10+**. You can install dependencies with pip or conda, or run everything in Docker.
 
-## Environment
+```bash
+# clone the repository
+git clone https://github.com/yourorg/anomaly-detection.git
+cd anomaly-detection
 
-The recommended way to run the pipeline is inside Docker. A `Dockerfile` and `docker-compose.anomaly.yml` are included.
+# optional: create a virtual environment
+python -m venv venv
+source venv/bin/activate
+
+# install requirements
+pip install -r requirements.txt
+```
+
+Conda users may create an environment with the provided `environment.yml`:
+
+```bash
+conda env create -f environment.yml
+conda activate python3.12
+```
+
+To start a completely reproducible stack, build and run the Docker compose setup:
 
 ```bash
 docker compose -f docker-compose.anomaly.yml up --build
 ```
 
-This launches a container running Jupyter Notebook on port `8891` with all Python dependencies installed.
+This exposes the FastAPI service on **localhost:8002** and mounts the project source code inside the container.
 
-For local development without Docker, create a Python 3.10+ environment and install dependencies from `requirements.txt` or `environment.yml`:
+## Usage
+
+Run the Jupyter notebook for exploratory work:
 
 ```bash
-# Using conda
-env_name=anomaly_env
-conda create -n $env_name python=3.12
-conda activate $env_name
+jupyter notebook src/pipeline/main.ipynb
+```
+
+Or execute the pipeline as a script:
+
+```bash
+python src/pipeline/main.py
+```
+
+The FastAPI service can be launched manually from `src/pipeline`:
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+```
+
+After processing, results are written to `data/anomalies_output.json` and plots are generated for each device.
+
+## Configuration
+
+All paths and model parameters live in [`src/pipeline/config.py`](src/pipeline/config.py). Edit this file or set the following environment variables to override defaults:
+
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` – PostgreSQL connection
+- `SEQUENCE_LENGTH`, `ANOMALY_PERCENTILE` – LSTM settings
+- `DEVICES_DATA_PATH` – location of input CSV files
+- `SAVED_MODELS_PATH` – directory containing `.h5` models
+
+Ensure these folders exist or are mounted when running in Docker.
+
+## Development
+
+Install development tools and run the tests:
+
+```bash
 pip install -r requirements.txt
+pip install pytest black flake8 pre-commit
+pre-commit install
+pytest
 ```
 
-The main libraries used are:
+Formatting is enforced with **Black** and **flake8** via pre‑commit hooks. Benchmark scripts live in the `benchmark/` folder.
 
-- `pandas`, `numpy`, `scikit-learn`
-- `tensorflow` and `keras`
-- `matplotlib`, `seaborn`
-- `psycopg2-binary` for PostgreSQL access
-- `paho-mqtt`, `psutil`, and other utilities
+## Project Structure
 
-## Database Configuration
-
-The pipeline now requires access to a PostgreSQL database to load historical sensor values. Connection parameters are defined in `src/pipeline/config.py`:
-
-```python
-DB_NAME = "db"
-DB_USER = "user"
-DB_PASSWORD = "password"
-DB_HOST = "db"  # Docker service name
-DB_PORT = "5432"
+```
+├── src/                 # pipeline code
+│   ├── devices_data/    # example CSVs
+│   └── pipeline/        # FastAPI server and utilities
+├── storage/saved_models # pretrained LSTM models
+├── data/                # output JSON and plots
+└── benchmark/           # performance tests
 ```
 
-These can be adjusted through environment variables or by editing `config.py`. Ensure the database is running and reachable from the Docker container (the compose file expects a service named `db`).
+## Contributing
 
-## Running the Pipeline
+Contributions are welcome! Please open an issue or pull request. Make sure to format your code with **Black** and run `pre-commit` before submitting.
 
-1. Start the Docker environment or activate your Python environment.
-2. Open Jupyter Notebook (automatically started inside Docker) and navigate to `src/pipeline/main.ipynb`. **This notebook handles all database communication.**
-3. Execute the notebook cells or convert it to a Python script and run:
+## License
 
-   ```bash
-   python src/pipeline/main.py
-   ```
+This project is licensed under the [MIT](LICENSE) license.
 
-   Note that `main.py` does not connect to PostgreSQL. It expects CSV data only.
+## Credits
 
-The script loads data, performs anomaly detection per device, plots reconstruction errors, and writes results to `data/anomalies_output.json`.
+Built with help from **LLM Agents** and numerous open‑source libraries including TensorFlow, Pandas and FastAPI.
 
-## Output
+## FAQ
 
-`anomalies_output.json` contains a record for each timestamp with keys such as `device`, `timestamp`, `error`, `state`, `is_anomaly`, and `error_percentile`. Plots illustrating reconstruction error vs. the anomaly threshold are also generated for each device.
+- **File or model not found** – verify the paths in `config.py`.
+- **No anomalies detected** – lower `ANOMALY_PERCENTILE` or retrain your models.
+- **Plotting issues** – ensure the DataFrame passed to plotting functions contains the required columns.
 
-## Troubleshooting
-
-- **File or model not found** &ndash; verify the directory paths in `config.py`.
-- **No anomalies detected** &ndash; lower `ANOMALY_PERCENTILE` or review model training.
-- **Plotting issues** &ndash; ensure the DataFrame passed to `plot_reconstruction_error` has the required columns.
-
----
