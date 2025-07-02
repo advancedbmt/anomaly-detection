@@ -11,3 +11,5 @@ seaborn
 pyod
 psycopg2-binary
 paho-mqtt
+fastapi
+uvicorn[standard]
