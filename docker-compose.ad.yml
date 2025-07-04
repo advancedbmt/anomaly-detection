@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: ad-fastapi-service
     ports:
-      - "8001:8001"
+      - "18001:8001"
     environment:
       - PYTHONPATH=/app
     volumes:

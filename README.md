@@ -23,7 +23,7 @@ This brings up the interactive **Swagger UI** where you can test the `/run_ad` e
 ### Example 1: Motor Monitor
 ```json
 {
-  "csv_path": "train_data/devices_data/motor_monitor_0_unified.csv",
+  "csv_path": "/app/storage/train_data/devices_data_demo/motor_monitor_0_unified.csv",
   "device_type": "motor_monitor"
 }
 ```
@@ -31,7 +31,7 @@ This brings up the interactive **Swagger UI** where you can test the `/run_ad` e
 ### Example 2: Bale Counter
 ```json
 {
-  "csv_path": "train_data/devices_data/bale_counter_0_unified.csv",
+  "csv_path": "/app/storage/train_data/devices_data_demo/bale_counter_0_unified.csv",
   "device_type": "bale_counter"
 }
 ```
@@ -39,7 +39,7 @@ This brings up the interactive **Swagger UI** where you can test the `/run_ad` e
 ### Example 3: Temperature Sensor
 ```json
 {
-  "csv_path": "train_data/devices_data/temperature_sensor_0_unified.csv",
+  "csv_path": "/app/storage/train_data/devices_data_demo/temperature_sensor_0_unified.csv",
   "device_type": "temperature_sensor"
 }
 ```
@@ -47,7 +47,7 @@ This brings up the interactive **Swagger UI** where you can test the `/run_ad` e
 ### Example 4: Output Sensor
 ```json
 {
-  "csv_path": "train_data/devices_data/output_sensor_0_unified.csv",
+  "csv_path": "/app/storage/train_data/devices_data_demo/output_sensor_0_unified.csv",
   "device_type": "output_sensor"
 }
 ```
